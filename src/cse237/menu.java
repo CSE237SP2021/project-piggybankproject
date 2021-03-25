@@ -30,13 +30,18 @@ public class menu {
 		menu loginScreen = new menu(); 
 		loginScreen.displayMainMenu();
 		int option1 = Integer.parseInt(loginScreen.getInput()); 
-		if(option1==1) {
+		int previousUser = 1; 
+		int newUser = 2; 
+		if(option1==previousUser) {
+			//already have an account
 			System.out.println("Please Enter your username below!");
 			System.out.println("Please Enter your password below!");
 		} else {
+			//new user; 
 			user currUser = null; 
 			System.out.println("Please Enter a Username");
 			String createUsername = loginScreen.getInput(); 
+			System.out.println("Please Enter a Password");
 			String createPassword = loginScreen.getInput(); 
 			while(currUser==null) { 
 				currUser = loginScreen.createUser(createUsername,createPassword);
@@ -53,10 +58,15 @@ public class menu {
 		loginScreen.closeBoard(); 
 	}
 
+	
+	
 	private static void displayMainMenu() {
 		System.out.println("Welcome to the piggyBank!");
 		System.out.println("Please enter 1. to login or 2. to create a new account");
 	}
+	
+	
+	
 	
 	private String getInput() {
 		return keyBoardIn.nextLine(); 
@@ -102,6 +112,7 @@ public class menu {
 		//https://www.w3schools.com/java/java_files_read.asp
 		Scanner readUsers;
 		try {
+			// go through file of existing usernames and see if it exists
 			readUsers = new Scanner(this.userDatabase);
 			while(readUsers.hasNextLine()) {
 				if(readUsers.nextLine().equals(username)) {
