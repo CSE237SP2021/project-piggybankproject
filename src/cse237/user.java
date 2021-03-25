@@ -20,4 +20,7 @@ public boolean checkPassword(String passwordAttempt) {
 public double getBalance() {
 	return this.balance;
 }
+public String getUsername() {
+	return this.username; 
+}
 }
