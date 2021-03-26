@@ -29,8 +29,10 @@ public class menu {
 		user currUser = null; 
 		if(option1==1) {
 			//existing user login
-			loginScreen.userLogin();
-			
+			currUser = loginScreen.userLogin();
+			account newAccount = new account(currUser);
+			actionPage action = new actionPage(newAccount);
+			action.main(null);
 		} else {
 			//new user; 
 			currUser = null; 
@@ -39,14 +41,15 @@ public class menu {
 		loginScreen.closeBoard(); 
 	}
 
-	private void userLogin() {
+	private user userLogin() {
 		//already have an account
 		user currUser = null; 
 		System.out.println("Please Enter your username below!");
 		String username = getInput(); 
 		if(userExists(username)) {
-			System.out.println("login successful"); 
+			System.out.println("login successful");
 			currUser = new user(username, "password"); 
+			return currUser;
 		} else {
 			System.out.println("Login failed"); 
 			while(currUser==null) {
@@ -54,12 +57,14 @@ public class menu {
 				username = getInput(); 
 					if(userExists(username)) { 
 						currUser = new user(username, "password"); 
-						System.out.println("login successful"); 
+						System.out.println("login successful");
+						return currUser;
 					} else {
 					System.out.println("Login failed"); 
 					}
 			}
 		}
+		return null;
 	}
 
 	private void createNewUser() {
