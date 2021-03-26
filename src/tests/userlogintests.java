@@ -14,7 +14,6 @@ class userlogintests {
 		user userLogin = new user("username","password");
 		boolean match = userLogin.checkPassword("password"); 
 		assertTrue(match); 
-		assertTrue(userLogin.getBalance()==0);
 	}
 	@Test
 	void userLoginFailure() {
