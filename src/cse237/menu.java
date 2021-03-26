@@ -20,42 +20,64 @@ public class menu {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
-		
 	}
 	
 	public static void main(String[]args) {
-		
 		menu loginScreen = new menu(); 
 		loginScreen.displayMainMenu();
 		int option1 = Integer.parseInt(loginScreen.getInput()); 
-		int previousUser = 1; 
-		int newUser = 2; 
-		if(option1==previousUser) {
-			//already have an account
-			System.out.println("Please Enter your username below!");
-			System.out.println("Please Enter your password below!");
+		user currUser = null; 
+		if(option1==1) {
+			//existing user login
+			loginScreen.userLogin();
+			
 		} else {
 			//new user; 
-			user currUser = null; 
-			System.out.println("Please Enter a Username");
-			String createUsername = loginScreen.getInput(); 
-			System.out.println("Please Enter a Password");
-			String createPassword = loginScreen.getInput(); 
-			while(currUser==null) { 
-				currUser = loginScreen.createUser(createUsername,createPassword);
-				if(currUser==null) {
-					createUsername = loginScreen.getInput(); 
-					createPassword = loginScreen.getInput(); 
-				}
-			
-				
-			}
-			System.out.println("Account Creation Successful");
-			
+			currUser = null; 
+			loginScreen.createNewUser();
 		}
 		loginScreen.closeBoard(); 
+	}
+
+	private void userLogin() {
+		//already have an account
+		user currUser = null; 
+		System.out.println("Please Enter your username below!");
+		String username = getInput(); 
+		if(userExists(username)) {
+			System.out.println("login successful"); 
+			currUser = new user(username, "password"); 
+		} else {
+			System.out.println("Login failed"); 
+			while(currUser==null) {
+				System.out.println("Retry Login");
+				username = getInput(); 
+					if(userExists(username)) { 
+						currUser = new user(username, "password"); 
+						System.out.println("login successful"); 
+					} else {
+					System.out.println("Login failed"); 
+					}
+			}
+		}
+	}
+
+	private void createNewUser() {
+		user currUser = null; 
+		System.out.println("Please Enter a Username");
+		String createUsername = getInput(); 
+		System.out.println("Please Enter a Password");
+		String createPassword = getInput(); 
+		while(currUser==null) { 
+			currUser = createUser(createUsername,createPassword);
+			if(currUser==null) {
+				System.out.println("Please Enter a Username");
+				createUsername = getInput(); 
+				System.out.println("Please Enter a Password");
+				createPassword = getInput(); 
+			}
+		}
+		System.out.println("Account Creation Successful");
 	}
 
 	
