@@ -39,7 +39,7 @@ public class menu {
 		} else {
 			//new user; 
 			currUser = null; 
-			loginScreen.createNewUser();
+			loginScreen.createNewUserPrompt();
 		}
 		loginScreen.closeBoard(); 
 	}
@@ -77,7 +77,7 @@ public class menu {
 	/**
 	 * If the person chooses to create a new profile, they are asked to input a username and password. Makes sure that username doesn't already exist. 
 	 */
-	private void createNewUser() {
+	private void createNewUserPrompt() {
 		user currUser = null; 
 		System.out.println("Please Enter a Username");
 		String createUsername = getInput(); 
