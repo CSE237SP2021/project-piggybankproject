@@ -13,7 +13,7 @@ public class actionPage {
 	
 	public static void main(String[]args) {
 		actionPage activePage = new actionPage(account);
-		System.out.println("Press 1. for depositing, Press 2 for withdrawal");
+		System.out.println("Press 1 for depositing, Press 2 for withdrawal");
 		String userInput = activePage.getInput();
 		while(!userInput.equals("exit")) {
 		int userChoice = Integer.parseInt(userInput);
@@ -23,11 +23,13 @@ public class actionPage {
 		else {
 			withdraw();
 		}
-		System.out.println("Press 1. for depositing, Press 2 for withdrawal");
+		System.out.println("Press 1 for depositing, Press 2 for withdrawal");
 		userInput = activePage.getInput();
 	}
 }
-
+	/**
+	 * Asks user to enter withdrawal amount and withdraws it if there are sufficient funds in account.
+	 */
 	private static void withdraw() {
 		System.out.println("How much money would you like to withdraw?");
 		double amount = Double.parseDouble(getInput());
@@ -39,7 +41,10 @@ public class actionPage {
 			System.out.println("You have successfully withdrawn $"+ amount + "from your account!");
 		}
 	}
-
+	
+	/**
+	 * Deposits desired amount into account. 
+	 */
 	private static void deposit() {
 		System.out.println("How much money would you like to deposit?");
 		double amount = Double.parseDouble(getInput());

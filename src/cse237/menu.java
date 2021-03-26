@@ -1,5 +1,4 @@
 package cse237;
-//testing testing 123
 import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,6 +21,10 @@ public class menu {
 		}
 	}
 	
+	/**
+	 * Logs in the user, creates an account, takes them to a new interface for account actions.
+	 * @param args
+	 */
 	public static void main(String[]args) {
 		menu loginScreen = new menu(); 
 		loginScreen.displayMainMenu();
@@ -40,14 +43,18 @@ public class menu {
 		}
 		loginScreen.closeBoard(); 
 	}
-
+	
+	/**
+	 * When the user chooses to login, they are brought to this set of steps. When they choose a current username that exists in file, success.  
+	 * @return User object, assuming successful login
+	 */
 	private user userLogin() {
-		//already have an account
+		//already have a profile
 		user currUser = null; 
-		System.out.println("Please Enter your username below!");
+		System.out.println("Please enter your username below:");
 		String username = getInput(); 
 		if(userExists(username)) {
-			System.out.println("login successful");
+			System.out.println("Login successful!");
 			currUser = new user(username, "password"); 
 			return currUser;
 		} else {
@@ -57,16 +64,19 @@ public class menu {
 				username = getInput(); 
 					if(userExists(username)) { 
 						currUser = new user(username, "password"); 
-						System.out.println("login successful");
+						System.out.println("Login successful!");
 						return currUser;
 					} else {
 					System.out.println("Login failed"); 
-					}
+				}
 			}
 		}
 		return null;
 	}
-
+	
+	/**
+	 * If the person chooses to create a new profile, they are asked to input a username and password. Makes sure that username doesn't already exist. 
+	 */
 	private void createNewUser() {
 		user currUser = null; 
 		System.out.println("Please Enter a Username");
@@ -84,66 +94,61 @@ public class menu {
 		}
 		System.out.println("Account Creation Successful");
 	}
-
 	
-	
+	/**
+	 * Displays welcome message and asks for login vs. profile creation.
+	 */
 	private static void displayMainMenu() {
 		System.out.println("Welcome to the piggyBank!");
-		System.out.println("Please enter 1. to login or 2. to create a new account");
+		System.out.println("Please enter 1. to login or 2. to create a new profile");
 	}
-	
-	
-	
 	
 	private String getInput() {
 		return keyBoardIn.nextLine(); 
 	}
+	
 	private void closeBoard() {
 		keyBoardIn.close(); 
 	}
+	
 	/**
-	 * 
-	 * @param username username of new use to create
-	 * @param password password of new user
+	 * Creates a user from their desired username & password, unless the username already exists on file
+	 * @param username Username of new user to create
+	 * @param password Password of new user
 	 * @return the User object if user creation is successful, null otherwise
 	 */
 	public user createUser(String username, String password) {
-
 		try {
 			//https://www.baeldung.com/java-append-to-file
 			if(this.userExists(username)) {
 				System.out.println("Username is already taken"); 
 				return null; 
 			}
-			
 				userList.write(username); 
 				userList.append("\n"); 
 				user newUser = new user(username,password); 
 				userList.close(); 
 				return newUser; 
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			 return null; 
+			return null; 
 		} 
 	}
-	
 		
 	/**
-	 * 
-	 * @param username username to see if it exists
-	 * @return true if user exists, false otherwise 
+	 * Checks to see if an entered username already exists on file.
+	 * @param username Username to see if it exists already in database
+	 * @return true if username already exists, false otherwise 
 	 */
 	public boolean userExists(String username) {
 		//https://www.w3schools.com/java/java_files_read.asp
 		Scanner readUsers;
 		try {
-			// go through file of existing usernames and see if it exists
+			//go through file of existing usernames and see if it exists
 			readUsers = new Scanner(this.userDatabase);
 			while(readUsers.hasNextLine()) {
 				if(readUsers.nextLine().equals(username)) {
-					
 					return true; 
 				} else {
 					//keep going
@@ -154,7 +159,6 @@ public class menu {
 			e.printStackTrace();
 			return false; 
 		} 
-		
 		return false; 
 	}
 }
