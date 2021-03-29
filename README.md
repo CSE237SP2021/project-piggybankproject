@@ -1,4 +1,4 @@
-# cse237-project
+# CSE237 Piggy Bank Project
 The Piggy Bank Project is an application that is meant to simulate a simple banking application that allows users to interact with their accounts and manage their basic finances. This application is geared towards an audience that is newer to the banking system, as its features include the fundamental structure of most bank accounts. 
 
 In its current form (i.e. Iteration 1), the application allows a user to create a profile or sign in with their chosen username and password. Currently, our program does not allow a user to make a profile with a username that has already been taken. These usernames are stored in a .txt file. Once they have made a profile/signed in, the user is brought to an account page, where they can choose to view their account statistics (i.e. balance), deposit money into their account, or withdraw from their account, if they have sufficient funds in their account. 
