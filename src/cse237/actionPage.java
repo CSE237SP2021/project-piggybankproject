@@ -13,17 +13,24 @@ public class actionPage {
 	
 	public static void main(String[]args) {
 		actionPage activePage = new actionPage(account);
-		System.out.println("Press 1 for depositing, Press 2 for withdrawal");
+		String actionText = "Enter: \n1 for depositing \n2 for withdrawal \n3 to see current balance";
+		System.out.println(actionText);
 		String userInput = activePage.getInput();
 		while(!userInput.equals("exit")) {
 		int userChoice = Integer.parseInt(userInput);
 		if (userChoice == 1) {
 			deposit();
 		}
-		else {
+		else if (userChoice == 2) {
 			withdraw();
 		}
-		System.out.println("Press 1 for depositing, Press 2 for withdrawal");
+		else if (userChoice == 3) {
+			viewBalance();
+		}
+		else {
+			System.out.println("Invalid entry");
+		}
+		System.out.println(actionText);
 		userInput = activePage.getInput();
 	}
 }
@@ -38,7 +45,7 @@ public class actionPage {
 			System.out.println("Insufficient Funds for this Withdrawal Amount");
 		}
 		else {
-			System.out.println("You have successfully withdrawn $"+ amount + "from your account!");
+			System.out.println("You have successfully withdrawn $"+ amount + " from your account!");
 		}
 	}
 	
@@ -49,6 +56,13 @@ public class actionPage {
 		System.out.println("How much money would you like to deposit?");
 		double amount = Double.parseDouble(getInput());
 		account.depositMoney(amount);
+	}
+	
+	/**
+	 * Print out current user balance
+	 */
+	private static void viewBalance() {
+		System.out.println("Your current account balance is: $" + account.getBalance());
 	}
 	
 	private static String getInput() {
