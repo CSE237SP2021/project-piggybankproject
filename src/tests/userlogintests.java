@@ -35,8 +35,13 @@ class userlogintests {
 	@Test
 	void userExists() {
 		menu mainmenu = new menu(); 
-		user userTest = new user("max.mazursky", "password"); 
+		int username = (int) (Math.random() * 1000000*Math.random()); 
+		int password = (int) (Math.random() * 1000000*Math.random()); 
+		user userTest = new user(Integer.toString(username), Integer.toString(password)); 
+		mainmenu.createUser(userTest.getUsername(), userTest.getPassword()); 
 		boolean found = mainmenu.userExists(userTest.getUsername()); 
 		assertTrue(found); 
 	}
+	
+	
 }

@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
 import cse237.account;
@@ -10,7 +12,7 @@ import cse237.user;
 class DepositTest {
 
 	@Test
-	void testDepositIntoAccount() {
+	void testDepositIntoAccount() throws IOException {
 		user user_ex = new user("username", "password");
 		account account_1 = new account(user_ex);
 		account_1.depositMoney(100);
@@ -18,7 +20,7 @@ class DepositTest {
 	}
 	
 	@Test
-	void testWithdrawFromAccount_Success() {
+	void testWithdrawFromAccount_Success() throws IOException {
 		user user_ex = new user("username", "password");
 		account account_1 = new account(user_ex);
 		account_1.depositMoney(100);
@@ -27,7 +29,7 @@ class DepositTest {
 	}
 	
 	@Test
-	void testWithdrawFromAccount_Failure() {
+	void testWithdrawFromAccount_Failure() throws IOException {
 		user user_ex = new user("username", "password");
 		account account_1 = new account(user_ex);
 		account_1.depositMoney(100);
