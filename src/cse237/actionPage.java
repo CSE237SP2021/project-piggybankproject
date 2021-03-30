@@ -1,5 +1,6 @@
 package cse237;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class actionPage {
@@ -11,8 +12,9 @@ public class actionPage {
 		this.keyBoardIn= new Scanner(System.in);
 	}
 	
-	public static void main(String[]args) {
+	public static void main(String[]args) throws IOException {
 		actionPage activePage = new actionPage(account);
+		account.setBalance(); 
 		String actionText = "Enter: \n1 for depositing \n2 for withdrawal \n3 to see current balance";
 		System.out.println(actionText);
 		String userInput = activePage.getInput();
@@ -33,11 +35,13 @@ public class actionPage {
 		System.out.println(actionText);
 		userInput = activePage.getInput();
 	}
+	
 }
 	/**
 	 * Asks user to enter withdrawal amount and withdraws it if there are sufficient funds in account.
+	 * @throws IOException 
 	 */
-	private static void withdraw() {
+	private static void withdraw() throws IOException {
 		System.out.println("How much money would you like to withdraw?");
 		double amount = Double.parseDouble(getInput());
 		boolean successfulWithdrawal = account.withdrawMoney(amount);
@@ -51,8 +55,9 @@ public class actionPage {
 	
 	/**
 	 * Deposits desired amount into account. 
+	 * @throws IOException 
 	 */
-	private static void deposit() {
+	private static void deposit() throws IOException {
 		System.out.println("How much money would you like to deposit?");
 		double amount = Double.parseDouble(getInput());
 		account.depositMoney(amount);

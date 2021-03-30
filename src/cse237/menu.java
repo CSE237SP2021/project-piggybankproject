@@ -24,24 +24,31 @@ public class menu {
 	/**
 	 * Logs in the user, creates an account, takes them to a new interface for account actions.
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[]args) {
+	public static void main(String[]args) throws IOException {
 		menu loginScreen = new menu(); 
 		loginScreen.displayMainMenu();
 		int option1 = Integer.parseInt(loginScreen.getInput()); 
 		user currUser = null; 
 		if(option1==1) {
 			//existing user login
-			currUser = loginScreen.userLogin();
-			account newAccount = new account(currUser);
-			actionPage action = new actionPage(newAccount);
-			action.main(null);
+			loginScreen.existingUserLogin();
 		} else {
 			//new user; 
 			currUser = null; 
 			loginScreen.createNewUserPrompt();
 		}
 		loginScreen.closeBoard(); 
+	}
+
+	private void existingUserLogin() throws IOException {
+		user currUser;
+		currUser = userLogin();
+		account newAccount = new account(currUser);
+		newAccount.getAccountNum(); 
+		actionPage action = new actionPage(newAccount);
+		action.main(null);
 	}
 	
 	/**
@@ -76,8 +83,9 @@ public class menu {
 	
 	/**
 	 * If the person chooses to create a new profile, they are asked to input a username and password. Makes sure that username doesn't already exist. 
+	 * @throws IOException 
 	 */
-	private void createNewUserPrompt() {
+	private void createNewUserPrompt() throws IOException {
 		user currUser = null; 
 		System.out.println("Please Enter a Username");
 		String createUsername = getInput(); 
@@ -92,8 +100,18 @@ public class menu {
 				createPassword = getInput(); 
 			}
 		}
-		System.out.println("Account Creation Successful");
+		 account newAccount = new account(currUser); 
+		 try {
+		int accountNum = newAccount.generateAccountNum();
+	
+		System.out.println("Account Creation Successful. Please restart the application to login. Your account number is " + accountNum);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
+	
 	
 	/**
 	 * Displays welcome message and asks for login vs. profile creation.
@@ -161,4 +179,7 @@ public class menu {
 		} 
 		return false; 
 	}
+	
+
 }
+
