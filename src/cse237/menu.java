@@ -60,17 +60,22 @@ public class menu {
 		user currUser = null; 
 		System.out.println("Please enter your username below:");
 		String username = getInput(); 
-		if(userExists(username)) {
+		System.out.println("Please enter your password below:");
+		String password = getInput(); 
+		if(userExists(username) && correctPassword(username, password)) {
 			System.out.println("Login successful!");
-			currUser = new user(username, "password"); 
+			currUser = new user(username, password); 
 			return currUser;
 		} else {
-			System.out.println("Login failed"); 
+			System.out.println("Login failed. Username or password is incorrect"); 
 			while(currUser==null) {
 				System.out.println("Retry Login");
+				System.out.println("Please enter your username below:");
 				username = getInput(); 
-					if(userExists(username)) { 
-						currUser = new user(username, "password"); 
+				System.out.println("Please enter your password below:");
+				password =getInput(); 
+					if(userExists(username)&& correctPassword(username,password)) { 
+						currUser = new user(username, password); 
 						System.out.println("Login successful!");
 						return currUser;
 					} else {
@@ -143,6 +148,8 @@ public class menu {
 				return null; 
 			}
 				userList.write(username); 
+				userList.write(",");
+				userList.write(password);
 				userList.append("\n"); 
 				user newUser = new user(username,password); 
 				userList.close(); 
@@ -166,7 +173,8 @@ public class menu {
 			//go through file of existing usernames and see if it exists
 			readUsers = new Scanner(this.userDatabase);
 			while(readUsers.hasNextLine()) {
-				if(readUsers.nextLine().equals(username)) {
+				if(readUsers.nextLine().split(",")[0].equals(username)) {
+					readUsers.close(); 
 					return true; 
 				} else {
 					//keep going
@@ -175,11 +183,35 @@ public class menu {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 			return false; 
 		} 
+		readUsers.close(); 
 		return false; 
 	}
-	
+	public boolean correctPassword(String username, String password) {
+		Scanner readUsers;
+		try {
+			//go through file of existing usernames and see if it exists
+			readUsers = new Scanner(this.userDatabase);
+			while(readUsers.hasNextLine()) {
+				String [] userInfo = readUsers.nextLine().split(","); 
+				if(userInfo[0].equals(username)) {
+					readUsers.close(); 
+					return password.equals(userInfo[1]); 
+				} else {
+					//keep going
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			return false; 
+		} 
+		readUsers.close(); 
+		return false; 
+	}
 
 }
 

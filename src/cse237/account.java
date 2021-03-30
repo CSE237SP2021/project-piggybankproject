@@ -14,7 +14,6 @@ public class account {
 	private int accountNumber;
 	private double balance;
 	private FileWriter accountGenerator; 
-	private FileWriter balanceUpdater; 
 
 	private File accountList;
 	private File balanceList; 
