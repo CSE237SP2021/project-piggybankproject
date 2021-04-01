@@ -10,7 +10,9 @@ public class menu {
 	private Scanner keyBoardIn;
 	private FileWriter userList; 
 	private File userDatabase; 
+	private UserRepo trackUsers; 
 	public menu() {
+		trackUsers = new UserRepo("balance.txt", "accounts.txt", "usernames.txt"); 
 		keyBoardIn = new Scanner(System.in); 
 		userDatabase = new File("usernames.txt"); 
 		try {
@@ -62,7 +64,7 @@ public class menu {
 		String username = getInput(); 
 		System.out.println("Please enter your password below:");
 		String password = getInput(); 
-		if(userExists(username) && correctPassword(username, password)) {
+		if(trackUsers.userExists(username) && trackUsers.correctPassword(username, password)) {
 			System.out.println("Login successful!");
 			currUser = new user(username, password); 
 			return currUser;
@@ -74,7 +76,7 @@ public class menu {
 				username = getInput(); 
 				System.out.println("Please enter your password below:");
 				password =getInput(); 
-					if(userExists(username)&& correctPassword(username,password)) { 
+					if(trackUsers.userExists(username)&& trackUsers.correctPassword(username,password)) { 
 						currUser = new user(username, password); 
 						System.out.println("Login successful!");
 						return currUser;
@@ -143,7 +145,7 @@ public class menu {
 	public user createUser(String username, String password) {
 		try {
 			//https://www.baeldung.com/java-append-to-file
-			if(this.userExists(username)) {
+			if(trackUsers.userExists(username)) {
 				System.out.println("Username is already taken"); 
 				return null; 
 			}
@@ -161,57 +163,7 @@ public class menu {
 		} 
 	}
 		
-	/**
-	 * Checks to see if an entered username already exists on file.
-	 * @param username Username to see if it exists already in database
-	 * @return true if username already exists, false otherwise 
-	 */
-	public boolean userExists(String username) {
-		//https://www.w3schools.com/java/java_files_read.asp
-		Scanner readUsers;
-		try {
-			//go through file of existing usernames and see if it exists
-			readUsers = new Scanner(this.userDatabase);
-			while(readUsers.hasNextLine()) {
-				if(readUsers.nextLine().split(",")[0].equals(username)) {
-					readUsers.close(); 
-					return true; 
-				} else {
-					//keep going
-				}
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-			return false; 
-		} 
-		readUsers.close(); 
-		return false; 
-	}
-	public boolean correctPassword(String username, String password) {
-		Scanner readUsers;
-		try {
-			//go through file of existing usernames and see if it exists
-			readUsers = new Scanner(this.userDatabase);
-			while(readUsers.hasNextLine()) {
-				String [] userInfo = readUsers.nextLine().split(","); 
-				if(userInfo[0].equals(username)) {
-					readUsers.close(); 
-					return password.equals(userInfo[1]); 
-				} else {
-					//keep going
-				}
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-			return false; 
-		} 
-		readUsers.close(); 
-		return false; 
-	}
+	
 
 }
 

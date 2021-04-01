@@ -17,8 +17,10 @@ public class account {
 
 	private File accountList;
 	private File balanceList; 
+	private UserRepo userRepo; 
 	
 	public account(user user) throws IOException {
+		this.userRepo = new UserRepo("balance.txt", "accounts.txt", "usernames.txt"); 
 		this.user=user;
 		this.accountNumber = 0; 
 		this.balance=0; 
@@ -42,7 +44,7 @@ public class account {
 	public void depositMoney(double amount) throws IOException {
 		 
 		this.balance += amount;
-		updateBalance();
+		this.userRepo.updateBalance(this);
 	}
 	
 	/**
@@ -57,17 +59,17 @@ public class account {
 		}
 		else {
 			this.balance -= amount;
-			updateBalance(); 
+			this.userRepo.updateBalance(this); 
 			return true;
 		}
 	}
 	/**
 	 * This will set the balance of a user when they log in (it uses the file balance.txt to get the historical amount)
-	 * @returnthe value of the balance or 0 if the account is new. 
+	 * @return the value of the balance or 0 if the account is new. 
 	 * @throws IOException
 	 */
 	public double setBalance() throws IOException {
-		String accountInfo = getFileContents("balance.txt"); 
+		String accountInfo = userRepo.getFileContents("balance.txt"); 
 		Scanner scan = new Scanner(accountInfo); 
 		while(scan.hasNextLine()) {
 			String accountLine = scan.nextLine(); 
@@ -118,54 +120,13 @@ public class account {
 		accountGenerator.append("\n");
 		accountGenerator.close(); 
 		
-		String newAccountList = getFileContents("balance.txt") + accountNum +"," + this.balance + "\n"; 
+		String newAccountList = userRepo.getFileContents("balance.txt") + accountNum +"," + this.balance + "\n"; 
 		FileWriter addNewAccount = new FileWriter("balance.txt",false); 
 		addNewAccount.write(newAccountList);
 		addNewAccount.close(); 
 		return accountNum; 
 	}
-	/**
-	 *  This function intends to help clean up the process of getting the contents of a file
-	 * @param filename
-	 * @return the contents of a file as a string
-	 * @throws IOException
-	 */
-	public String getFileContents(String filename) throws IOException {
-		File f = new File(filename); 
-		String fileContents = ""; 
-		Scanner scan = new Scanner(f);
-		while(scan.hasNextLine()) {
-			fileContents = fileContents + scan.nextLine() + "\n"; 
-		}
-		
-		scan.close(); 
 	
-		return fileContents; 
-	}
-	/**
-	 * This simply updates the balance in the balance.txt file
-	 * @throws IOException
-	 */
-	public void updateBalance() throws IOException { 
-		String fileInfo = getFileContents("balance.txt"); 
-		Scanner scan = new Scanner(fileInfo); 
-		String oldLine = ""; 
-		String newLine =""; 
-		while(scan.hasNextLine()) {
-			String accountBalanceInfo = scan.nextLine(); 
-			String [] accountInfoArray = accountBalanceInfo.split(","); 
-			if(Integer.parseInt(accountInfoArray[0])==accountNumber) {
-				oldLine = accountBalanceInfo; 
-				accountInfoArray[1] = Double.toString(this.balance);
-				newLine = accountInfoArray[0] + "," + accountInfoArray[1]; 
-			}
-		}
-
-		fileInfo = fileInfo.replace(oldLine, newLine); 
-		FileWriter updateBalance = new FileWriter("balance.txt",false); 
-		updateBalance.write(fileInfo);
-		updateBalance.close(); 
-	}
 
 
 
