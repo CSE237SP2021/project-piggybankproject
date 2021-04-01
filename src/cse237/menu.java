@@ -10,7 +10,9 @@ public class menu {
 	private Scanner keyBoardIn;
 	private FileWriter userList; 
 	private File userDatabase; 
+	private UserRepo trackUsers; 
 	public menu() {
+		trackUsers = new UserRepo("balance.txt", "accounts.txt", "usernames.txt"); 
 		keyBoardIn = new Scanner(System.in); 
 		userDatabase = new File("usernames.txt"); 
 		try {
@@ -24,24 +26,31 @@ public class menu {
 	/**
 	 * Logs in the user, creates an account, takes them to a new interface for account actions.
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[]args) {
+	public static void main(String[]args) throws IOException {
 		menu loginScreen = new menu(); 
 		loginScreen.displayMainMenu();
 		int option1 = Integer.parseInt(loginScreen.getInput()); 
 		user currUser = null; 
 		if(option1==1) {
 			//existing user login
-			currUser = loginScreen.userLogin();
-			account newAccount = new account(currUser);
-			actionPage action = new actionPage(newAccount);
-			action.main(null);
+			loginScreen.existingUserLogin();
 		} else {
 			//new user; 
 			currUser = null; 
 			loginScreen.createNewUserPrompt();
 		}
 		loginScreen.closeBoard(); 
+	}
+
+	private void existingUserLogin() throws IOException {
+		user currUser;
+		currUser = userLogin();
+		account newAccount = new account(currUser);
+		newAccount.getAccountNum(); 
+		actionPage action = new actionPage(newAccount);
+		action.main(null);
 	}
 	
 	/**
@@ -53,17 +62,22 @@ public class menu {
 		user currUser = null; 
 		System.out.println("Please enter your username below:");
 		String username = getInput(); 
-		if(userExists(username)) {
+		System.out.println("Please enter your password below:");
+		String password = getInput(); 
+		if(trackUsers.userExists(username) && trackUsers.correctPassword(username, password)) {
 			System.out.println("Login successful!");
-			currUser = new user(username, "password"); 
+			currUser = new user(username, password); 
 			return currUser;
 		} else {
-			System.out.println("Login failed"); 
+			System.out.println("Login failed. Username or password is incorrect"); 
 			while(currUser==null) {
 				System.out.println("Retry Login");
+				System.out.println("Please enter your username below:");
 				username = getInput(); 
-					if(userExists(username)) { 
-						currUser = new user(username, "password"); 
+				System.out.println("Please enter your password below:");
+				password =getInput(); 
+					if(trackUsers.userExists(username)&& trackUsers.correctPassword(username,password)) { 
+						currUser = new user(username, password); 
 						System.out.println("Login successful!");
 						return currUser;
 					} else {
@@ -76,8 +90,9 @@ public class menu {
 	
 	/**
 	 * If the person chooses to create a new profile, they are asked to input a username and password. Makes sure that username doesn't already exist. 
+	 * @throws IOException 
 	 */
-	private void createNewUserPrompt() {
+	private void createNewUserPrompt() throws IOException {
 		user currUser = null; 
 		System.out.println("Please Enter a Username");
 		String createUsername = getInput(); 
@@ -92,8 +107,18 @@ public class menu {
 				createPassword = getInput(); 
 			}
 		}
-		System.out.println("Account Creation Successful");
+		 account newAccount = new account(currUser); 
+		 try {
+		int accountNum = newAccount.generateAccountNum();
+	
+		System.out.println("Account Creation Successful. Please restart the application to login. Your account number is " + accountNum);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
+	
 	
 	/**
 	 * Displays welcome message and asks for login vs. profile creation.
@@ -120,11 +145,13 @@ public class menu {
 	public user createUser(String username, String password) {
 		try {
 			//https://www.baeldung.com/java-append-to-file
-			if(this.userExists(username)) {
+			if(trackUsers.userExists(username)) {
 				System.out.println("Username is already taken"); 
 				return null; 
 			}
 				userList.write(username); 
+				userList.write(",");
+				userList.write(password);
 				userList.append("\n"); 
 				user newUser = new user(username,password); 
 				userList.close(); 
@@ -136,29 +163,7 @@ public class menu {
 		} 
 	}
 		
-	/**
-	 * Checks to see if an entered username already exists on file.
-	 * @param username Username to see if it exists already in database
-	 * @return true if username already exists, false otherwise 
-	 */
-	public boolean userExists(String username) {
-		//https://www.w3schools.com/java/java_files_read.asp
-		Scanner readUsers;
-		try {
-			//go through file of existing usernames and see if it exists
-			readUsers = new Scanner(this.userDatabase);
-			while(readUsers.hasNextLine()) {
-				if(readUsers.nextLine().equals(username)) {
-					return true; 
-				} else {
-					//keep going
-				}
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false; 
-		} 
-		return false; 
-	}
+	
+
 }
+

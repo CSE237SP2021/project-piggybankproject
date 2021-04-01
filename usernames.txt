@@ -1,16 +1,8 @@
-max.mazursky
-abcdefghnewUsername
-abcdefghijklmnop
-abcdefghijklmnop
-abcdefghijklmnop
-2.9160007283787392E7
-4.395817462018305E7
-1.9232727369609367E7
-3777964.205600827
-2.7900079350443885E7
-new stuff
-newUsername
-jisenfoawifoawiejfoawifjeoawifaslkdjfaslifmae
-hello world
-aosdhjfoainfewwoeinfaoweifhawofehj
-hannah.lester
+newUser,1234
+newestUser,abcde
+5.943358132053117E7,password
+1.8045959124057785E7,password
+1996332.014687692,password
+748991,147005
+max.mazursky,alskdjflakj
+newUser1,abcde
