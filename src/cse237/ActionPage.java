@@ -16,39 +16,42 @@ public class ActionPage {
 		ActionPage activePage = new ActionPage(account);
 		account.setBalance(); 
 		String actionText = "Enter: \n1 for depositing \n2 for withdrawal \n3 to see current balance";
-		System.out.println(actionText);
 		String userInput = "";
-		boolean valid = false;
-		checking(activePage, actionText, userInput, valid);
+		while(!userInput.equals("exit")) {
+			System.out.println(actionText); 
+			userInput = getInput(); 
+			System.out.println(userInput);
+			if(!userInput.equals("exit")) {
+				checking(userInput);
+			}
+			
+		}
+		
+	
 	}
 
-	private static void checking(ActionPage activePage, String actionText, String userInput, boolean valid) throws IOException {
-		while(!userInput.equals("exit")) {
-			while(!valid) {
+	private static void checking(String userInput) throws IOException {
+		
 				try {
-					int attempt = Integer.parseInt(getInput());
-					while (attempt < 0) {
-						System.out.println("you entered a negative number");
+					int attempt = Integer.parseInt(userInput);
+					System.out.println(userInput);
+					while (attempt < 0 || attempt >3) {
+						System.out.println("Invalid input. Please enter 1,2, or 3");
 						attempt = Integer.parseInt(getInput());
 					}
-					valid = true;
-					System.out.println("you entered positive number");
 					decideAction(attempt);
-					System.out.println(actionText);
-					userInput = activePage.getInput();
-					System.out.println("option 1");
-					//checking(activePage,actionText,userInput, valid);
 				}
 				catch (NumberFormatException e) {
-					System.out.println("you entered a non number");
+					System.out.println("Invalid input. Please enter 1,2, or 3");
 				}
-			}
-			System.out.println("option 2");
-			checking(activePage,actionText,userInput, valid);
-		}
+			
+		
+		
 	}
 
 	private static void decideAction(int userChoice) throws IOException {
+		
+	
 		if (userChoice == 1) {
 			deposit();
 		}
