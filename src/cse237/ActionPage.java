@@ -35,7 +35,6 @@ public class ActionPage {
 	private static void checking(String userInput) throws IOException {
 		try {
 			int attempt = Integer.parseInt(userInput);
-			System.out.println(userInput);
 			attempt = checkWrongNumber(attempt);
 			decideAction(attempt);
 		}
