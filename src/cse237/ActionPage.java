@@ -3,17 +3,17 @@ package cse237;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class actionPage {
-	private static account account;
+public class ActionPage {
+	private static Account account;
 	private static Scanner keyBoardIn;
 	
-	public actionPage(account account) {
+	public ActionPage(Account account) {
 		this.account=account;
 		this.keyBoardIn= new Scanner(System.in);
 	}
 	
 	public static void main(String[]args) throws IOException {
-		actionPage activePage = new actionPage(account);
+		ActionPage activePage = new ActionPage(account);
 		account.setBalance(); 
 		String actionText = "Enter: \n1 for depositing \n2 for withdrawal \n3 to see current balance";
 		System.out.println(actionText);

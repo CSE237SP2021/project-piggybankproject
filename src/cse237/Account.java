@@ -9,8 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 
-public class account {
-	private user user;
+public class Account {
+	private User user;
 	private int accountNumber;
 	private double balance;
 	private FileWriter accountGenerator; 
@@ -19,7 +19,7 @@ public class account {
 	private File balanceList; 
 	private UserRepo userRepo; 
 	
-	public account(user user) throws IOException {
+	public Account(User user) throws IOException {
 		this.userRepo = new UserRepo("balance.txt", "accounts.txt", "usernames.txt"); 
 		this.user=user;
 		this.accountNumber = 0; 
