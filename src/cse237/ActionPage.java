@@ -17,9 +17,38 @@ public class ActionPage {
 		account.setBalance(); 
 		String actionText = "Enter: \n1 for depositing \n2 for withdrawal \n3 to see current balance";
 		System.out.println(actionText);
-		String userInput = activePage.getInput();
+		String userInput = "";
+		boolean valid = false;
+		checking(activePage, actionText, userInput, valid);
+	}
+
+	private static void checking(ActionPage activePage, String actionText, String userInput, boolean valid) throws IOException {
 		while(!userInput.equals("exit")) {
-		int userChoice = Integer.parseInt(userInput);
+			while(!valid) {
+				try {
+					int attempt = Integer.parseInt(getInput());
+					while (attempt < 0) {
+						System.out.println("you entered a negative number");
+						attempt = Integer.parseInt(getInput());
+					}
+					valid = true;
+					System.out.println("you entered positive number");
+					decideAction(attempt);
+					System.out.println(actionText);
+					userInput = activePage.getInput();
+					System.out.println("option 1");
+					//checking(activePage,actionText,userInput, valid);
+				}
+				catch (NumberFormatException e) {
+					System.out.println("you entered a non number");
+				}
+			}
+			System.out.println("option 2");
+			checking(activePage,actionText,userInput, valid);
+		}
+	}
+
+	private static void decideAction(int userChoice) throws IOException {
 		if (userChoice == 1) {
 			deposit();
 		}
@@ -32,11 +61,8 @@ public class ActionPage {
 		else {
 			System.out.println("Invalid entry");
 		}
-		System.out.println(actionText);
-		userInput = activePage.getInput();
 	}
 	
-}
 	/**
 	 * Asks user to enter withdrawal amount and withdraws it if there are sufficient funds in account.
 	 * @throws IOException 
@@ -59,10 +85,23 @@ public class ActionPage {
 	 */
 	private static void deposit() throws IOException {
 		System.out.println("How much money would you like to deposit?");
-		double amount = Double.parseDouble(getInput());
-		account.depositMoney(amount);
+		boolean validInput = false; 
+		while(!validInput) {
+			try {
+				double amount = Double.parseDouble(getInput());
+				while (amount < 0) {
+					System.out.println("Please enter a positive amount of money:");
+					amount = Double.parseDouble(getInput());
+				}
+				validInput = true;
+				account.depositMoney(amount);
+			}
+			catch (NumberFormatException e){
+				System.out.println("Please enter a positive amount of money:");
+			}
+		}
 	}
-	
+
 	/**
 	 * Print out current user balance
 	 */
