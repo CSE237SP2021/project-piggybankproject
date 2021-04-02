@@ -119,7 +119,6 @@ public class Menu {
 		} 
 	}
 	
-	
 	/**
 	 * Displays welcome message and asks for login vs. profile creation.
 	 */
@@ -163,4 +162,3 @@ public class Menu {
 		} 
 	}
 }
-
