@@ -61,23 +61,6 @@ public class ActionPage {
 				catch (NumberFormatException e) {
 					System.out.println("Invalid input. Please enter 1,2, or 3");
 				}
-=======
-	
-	/**
-	 * Checks to make sure entry is a positive number, either 1/2/or 3, and sends to decision method for next action.
-	 * @param userInput
-	 * @throws IOException
-	 */
-	private static void checking(String userInput) throws IOException {
-		try {
-			int attempt = Integer.parseInt(userInput);
-			attempt = checkWrongNumber(attempt);
-			decideAction(attempt);
-		}
-		catch (NumberFormatException e) {
-			System.out.println("Invalid input. Please enter 1,2, or 3");
-		}
-
 	}
 	
 	/**
