@@ -64,6 +64,21 @@ public class Account {
 		}
 	}
 	/**
+	 * Sends a specified amount of money from active user to another
+	 * @param amount Money to be sent to new user
+	 * @param username user to receive money
+	 * @throws IOException
+	 */
+	public void sendMoney(double amount, Account accountReceive) throws IOException {
+		this.withdrawMoney(amount); 
+		
+
+		accountReceive.getAccountNum(); 
+		accountReceive.setBalance(); 
+		accountReceive.depositMoney(amount);
+
+	}
+	/**
 	 * This will set the balance of a user when they log in (it uses the file balance.txt to get the historical amount)
 	 * @return the value of the balance or 0 if the account is new. 
 	 * @throws IOException

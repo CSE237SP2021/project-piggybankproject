@@ -17,7 +17,28 @@ public UserRepo(String balanceFile, String accountFile, String usernameFile) {
 	this.accountTracker = new File(accountFile); 
 	this.usernameTracker = new File(usernameFile); 
 }
-
+public boolean accountExists(int accountNumber) {
+	try {
+		String accountList = getFileContents("accounts.txt");
+		Scanner readAccountList = new Scanner(accountList); 
+		boolean found = false; 
+		while(readAccountList.hasNextLine() && found==false) {
+			String accountInfo = readAccountList.nextLine(); 
+			String [] accountInfoArray = accountInfo.split(","); 
+			if(Integer.parseInt(accountInfoArray[1]) == accountNumber) {
+				return true; 
+			} else {
+				// keep looking
+			}
+		}
+		return false; 
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return false; 
+	} 
+	
+}
 /**
  * Checks to see if an entered username already exists on file.
  * @param username Username to see if it exists already in database

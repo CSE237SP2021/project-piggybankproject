@@ -6,3 +6,9 @@ newestUser,abcde
 748991,147005
 max.mazursky,alskdjflakj
 newUser1,abcde
+sender,sendMoney
+receiver,receiveMoney
+personA,personA
+personB,personB
+0,password
+zncasdcnaeaiwnceaiwunciawuneciawu,password
