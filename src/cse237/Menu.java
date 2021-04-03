@@ -35,10 +35,14 @@ public class Menu {
 		if(option1==1) {
 			//existing user login
 			loginScreen.existingUserLogin();
-		} else {
+		} else if(option1==2) {
 			//new user; 
 			currUser = null; 
 			loginScreen.createNewUserPrompt();
+		}
+		else {
+			System.out.println("Invalid Input. Please enter 1 or 2:");
+			//here, add in what to do with invalid input! 
 		}
 		loginScreen.closeBoard(); 
 	}
@@ -118,7 +122,6 @@ public class Menu {
 		} 
 	}
 	
-	
 	/**
 	 * Displays welcome message and asks for login vs. profile creation.
 	 */
@@ -162,4 +165,3 @@ public class Menu {
 		} 
 	}
 }
-

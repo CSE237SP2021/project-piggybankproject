@@ -61,11 +61,44 @@ public class ActionPage {
 				catch (NumberFormatException e) {
 					System.out.println("Invalid input. Please enter 1,2, or 3");
 				}
-	}
-
-	private static void decideAction(int userChoice) throws IOException {
-		
+=======
 	
+	/**
+	 * Checks to make sure entry is a positive number, either 1/2/or 3, and sends to decision method for next action.
+	 * @param userInput
+	 * @throws IOException
+	 */
+	private static void checking(String userInput) throws IOException {
+		try {
+			int attempt = Integer.parseInt(userInput);
+			attempt = checkWrongNumber(attempt);
+			decideAction(attempt);
+		}
+		catch (NumberFormatException e) {
+			System.out.println("Invalid input. Please enter 1,2, or 3");
+		}
+
+	}
+	
+	/**
+	 * Checks to see that someone returns a number that is not 1, 2, or 3. 
+	 * @param attempt
+	 * @return
+	 */
+	private static int checkWrongNumber(int attempt) {
+		while (attempt < 0 || attempt >3) {
+			System.out.println("Invalid input. Please enter 1,2, or 3");
+			attempt = Integer.parseInt(getInput());
+			}
+		return attempt;
+	}
+	
+	/**
+	 * Deposits, withdraws, or views balance depending on user input to the question
+	 * @param userChoice
+	 * @throws IOException
+	 */
+	private static void decideAction(int userChoice) throws IOException {
 		if (userChoice == 1) {
 			deposit();
 		}
@@ -123,7 +156,7 @@ public class ActionPage {
 	}
 
 	/**
-	 * Print out current user balance
+	 * Print out current user balance.
 	 */
 	private static void viewBalance() {
 		System.out.println("Your current account balance is: $" + account.getBalance());
