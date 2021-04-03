@@ -11,18 +11,12 @@ public File balanceTracker;
 public File accountTracker; 
 public File usernameTracker; 
 
-
-
-
-
 public UserRepo(String balanceFile, String accountFile, String usernameFile) {
 	// TODO Auto-generated constructor stub
 	this.balanceTracker = new File(balanceFile); 
 	this.accountTracker = new File(accountFile); 
 	this.usernameTracker = new File(usernameFile); 
 }
-
-
 
 /**
  * Checks to see if an entered username already exists on file.
@@ -79,7 +73,7 @@ public boolean correctPassword(String username, String password) {
  * This simply updates the balance in the balance.txt file
  * @throws IOException
  */
-public void updateBalance(account Account) throws IOException { 
+public void updateBalance(Account Account) throws IOException { 
 	String fileInfo = getFileContents("balance.txt"); 
 	Scanner scan = new Scanner(fileInfo); 
 	String oldLine = ""; 

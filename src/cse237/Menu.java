@@ -6,12 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException; 
 
-public class menu {
+public class Menu {
 	private Scanner keyBoardIn;
 	private FileWriter userList; 
 	private File userDatabase; 
 	private UserRepo trackUsers; 
-	public menu() {
+	public Menu() {
 		trackUsers = new UserRepo("balance.txt", "accounts.txt", "usernames.txt"); 
 		keyBoardIn = new Scanner(System.in); 
 		userDatabase = new File("usernames.txt"); 
@@ -29,27 +29,31 @@ public class menu {
 	 * @throws IOException 
 	 */
 	public static void main(String[]args) throws IOException {
-		menu loginScreen = new menu(); 
+		Menu loginScreen = new Menu(); 
 		loginScreen.displayMainMenu();
 		int option1 = Integer.parseInt(loginScreen.getInput()); 
-		user currUser = null; 
+		User currUser = null; 
 		if(option1==1) {
 			//existing user login
 			loginScreen.existingUserLogin();
-		} else {
+		} else if(option1==2) {
 			//new user; 
 			currUser = null; 
 			loginScreen.createNewUserPrompt();
+		}
+		else {
+			System.out.println("Invalid Input. Please enter 1 or 2:");
+			//here, add in what to do with invalid input! 
 		}
 		loginScreen.closeBoard(); 
 	}
 
 	private void existingUserLogin() throws IOException {
-		user currUser;
+		User currUser;
 		currUser = userLogin();
-		account newAccount = new account(currUser);
+		Account newAccount = new Account(currUser);
 		newAccount.getAccountNum(); 
-		actionPage action = new actionPage(newAccount);
+		ActionPage action = new ActionPage(newAccount);
 		action.main(null);
 	}
 	
@@ -57,16 +61,16 @@ public class menu {
 	 * When the user chooses to login, they are brought to this set of steps. When they choose a current username that exists in file, success.  
 	 * @return User object, assuming successful login
 	 */
-	private user userLogin() {
+	private User userLogin() {
 		//already have a profile
-		user currUser = null; 
+		User currUser = null; 
 		System.out.println("Please enter your username below:");
 		String username = getInput(); 
 		System.out.println("Please enter your password below:");
 		String password = getInput(); 
 		if(trackUsers.userExists(username) && trackUsers.correctPassword(username, password)) {
 			System.out.println("Login successful!");
-			currUser = new user(username, password); 
+			currUser = new User(username, password); 
 			return currUser;
 		} else {
 			System.out.println("Login failed. Username or password is incorrect"); 
@@ -77,7 +81,7 @@ public class menu {
 				System.out.println("Please enter your password below:");
 				password =getInput(); 
 					if(trackUsers.userExists(username)&& trackUsers.correctPassword(username,password)) { 
-						currUser = new user(username, password); 
+						currUser = new User(username, password); 
 						System.out.println("Login successful!");
 						return currUser;
 					} else {
@@ -93,7 +97,7 @@ public class menu {
 	 * @throws IOException 
 	 */
 	private void createNewUserPrompt() throws IOException {
-		user currUser = null; 
+		User currUser = null; 
 		System.out.println("Please Enter a Username");
 		String createUsername = getInput(); 
 		System.out.println("Please Enter a Password");
@@ -107,7 +111,7 @@ public class menu {
 				createPassword = getInput(); 
 			}
 		}
-		 account newAccount = new account(currUser); 
+		 Account newAccount = new Account(currUser); 
 		 try {
 		int accountNum = newAccount.generateAccountNum();
 	
@@ -118,7 +122,6 @@ public class menu {
 			e.printStackTrace();
 		} 
 	}
-	
 	
 	/**
 	 * Displays welcome message and asks for login vs. profile creation.
@@ -142,7 +145,7 @@ public class menu {
 	 * @param password Password of new user
 	 * @return the User object if user creation is successful, null otherwise
 	 */
-	public user createUser(String username, String password) {
+	public User createUser(String username, String password) {
 		try {
 			//https://www.baeldung.com/java-append-to-file
 			if(trackUsers.userExists(username)) {
@@ -153,7 +156,7 @@ public class menu {
 				userList.write(",");
 				userList.write(password);
 				userList.append("\n"); 
-				user newUser = new user(username,password); 
+				User newUser = new User(username,password); 
 				userList.close(); 
 				return newUser; 
 		} catch (IOException e) {
@@ -162,8 +165,4 @@ public class menu {
 			return null; 
 		} 
 	}
-		
-	
-
 }
-

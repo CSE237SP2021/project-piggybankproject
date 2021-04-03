@@ -1,11 +1,11 @@
 package cse237;
 
-public class user {
+public class User {
 	private String username; 
 	private String password; 
 	private double balance; 
 	
-	public user(String username, String password) {
+	public User(String username, String password) {
 	this.username=username;
 	this.password = password;
 	this.balance=0; 

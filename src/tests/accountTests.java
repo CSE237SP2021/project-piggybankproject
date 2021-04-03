@@ -2,12 +2,13 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import cse237.account;
-import cse237.user;
+import cse237.Account;
+import cse237.User;
 
 class accountTests {
 
@@ -16,8 +17,8 @@ class accountTests {
 	void generateAccountNumber() throws IOException {
 		int username = (int)(Math.random() *100000000 * Math.random());
 		int password = (int)(Math.random() * 10000000 * Math.random()); 
-		user user = new user(Integer.toString(username), Integer.toString(password)); 
-		account account = new account(user); 
+		User user = new User(Integer.toString(username), Integer.toString(password)); 
+		Account account = new Account(user); 
 		try {
 			int accountNum = account.generateAccountNum();
 			assertEquals(accountNum, account.getAccountNum()); 
@@ -25,15 +26,13 @@ class accountTests {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		
-		
 	}
 	
 	void checkBalanceUpdate() throws IOException {
 		int username = (int)(Math.random() *100000000 * Math.random());
 		int password = (int)(Math.random() * 10000000 * Math.random()); 
-		user user = new user(Integer.toString(username), Integer.toString(password)); 
-		account account = new account(user); 
+		User user = new User(Integer.toString(username), Integer.toString(password)); 
+		Account account = new Account(user); 
 		account.depositMoney(10000);
 		assertTrue(account.getBalance() == 10000); 
 		account.depositMoney(400);
@@ -41,5 +40,4 @@ class accountTests {
 		account.withdrawMoney(200); 
 		assertTrue(account.getBalance() == 10200); 
 	}
-
 }
