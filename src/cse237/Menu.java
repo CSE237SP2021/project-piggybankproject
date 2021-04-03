@@ -18,7 +18,6 @@ public class Menu {
 		try {
 			userList = new FileWriter("usernames.txt",true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
