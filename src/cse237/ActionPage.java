@@ -1,12 +1,14 @@
 package cse237;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ActionPage {
 	private static Account account;
 	private static Scanner keyBoardIn;
 	private static UserRepo userrepo; 
+	private static ArrayList<String> sessionLog = new ArrayList<String>();
 	public ActionPage(Account account) {
 		this.account=account;
 		this.keyBoardIn= new Scanner(System.in);
@@ -16,7 +18,8 @@ public class ActionPage {
 	public static void main(String[]args) throws IOException {
 		ActionPage activePage = new ActionPage(account);
 		account.setBalance(); 
-		String actionText = "Enter: \n1 for depositing \n2 for withdrawal \n3 to see current balance";
+		String actionText = "Enter: \n1 deposit \n2 withdraw \n3 view current balance"
+				+ " \n4 transfer money \n5 view session log";
 		String userInput = "";
 		while(!userInput.equals("exit")) {
 			System.out.println(actionText); 
@@ -40,6 +43,8 @@ public class ActionPage {
 				User receiver = new User(username, "masterKey"); 
 				Account accountReceive = new Account(receiver); 
 				account.sendMoney(amount, accountReceive);
+				sessionLog.add("Transfered $" + amount + " to " + username + " - balance: $" 
+				+ account.getBalance());
 				
 			} else {
 				System.out.println("Insufficient Funds"); 
@@ -52,14 +57,14 @@ public class ActionPage {
 		
 				try {
 					int attempt = Integer.parseInt(userInput);
-					while (attempt < 0 || attempt >4) {
-						System.out.println("Invalid input. Please enter 1,2, or 3");
+					while (attempt < 0 || attempt >5) {
+						System.out.println("Invalid input. Please enter a number 1-5");
 						attempt = Integer.parseInt(getInput());
 					}
 					decideAction(attempt);
 				}
 				catch (NumberFormatException e) {
-					System.out.println("Invalid input. Please enter 1,2, or 3");
+					System.out.println("Invalid input. Please enter a number 1-5");
 				}
 	}
 	
@@ -70,7 +75,7 @@ public class ActionPage {
 	 */
 	private static int checkWrongNumber(int attempt) {
 		while (attempt < 0 || attempt >3) {
-			System.out.println("Invalid input. Please enter 1,2, or 3");
+			System.out.println("Invalid input. Please enter a number 1-5");
 			attempt = Integer.parseInt(getInput());
 			}
 		return attempt;
@@ -94,6 +99,10 @@ public class ActionPage {
 		else if(userChoice == 4){
 			transferMoney(); 
 			
+		}
+		else if(userChoice == 5){
+			viewLog(); 
+			
 		} else {
 			System.out.println("Invalid entry");
 		}
@@ -112,6 +121,7 @@ public class ActionPage {
 		}
 		else {
 			System.out.println("You have successfully withdrawn $"+ amount + " from your account!");
+			sessionLog.add("withdrew $" + amount + " - balance: $" + account.getBalance());
 		}
 	}
 	
@@ -131,6 +141,8 @@ public class ActionPage {
 				}
 				validInput = true;
 				account.depositMoney(amount);
+				sessionLog.add("deposited $" + amount + " - balance: $" + account.getBalance());
+
 			}
 			catch (NumberFormatException e){
 				System.out.println("Please enter a positive amount of money:");
@@ -143,9 +155,17 @@ public class ActionPage {
 	 */
 	private static void viewBalance() {
 		System.out.println("Your current account balance is: $" + account.getBalance());
+		sessionLog.add("checked balance - balance: $" + account.getBalance());
 	}
 	
 	private static String getInput() {
 		return keyBoardIn.nextLine(); 
-	} 
+	}
+	
+	private static void viewLog() {
+		System.out.println("Log for current session:");
+		for(int i= 0; i<sessionLog.size(); i++) {
+			System.out.println(sessionLog.get(i));
+		}
+	}
 }
