@@ -44,6 +44,4 @@ class userlogintests {
 		boolean found = userRepo.userExists(userTest.getUsername());
 		assertTrue(found); 
 	}
-	
-	
 }
