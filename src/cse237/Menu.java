@@ -33,27 +33,39 @@ public class Menu {
 	 */
 	public static void main(String[] args) throws IOException {
 		Menu loginScreen = new Menu();
+		loginScreen.login();
+	}
+	
+	/**
+	 * Checking user input to either login or create new profile, validating input, & allowing them to exit. 
+	 * 
+	 * @throws IOException
+	 */
+	private void login() throws IOException {
 		String loginOption = "";
 		while (!loginOption.equals("exit")) {
-			loginScreen.displayMainMenu();
+			displayMainMenu();
+			loginOption = getInput();
 			if (!loginOption.equals("exit")) {
 				try {
-					int input = checkNumber(loginScreen);
-					loginOrCreate(loginScreen, input);
+					int input = checkNumber(loginOption);
+					loginOrCreate(this, input);
+					closeBoard();
+					break;
 				} catch (NumberFormatException e) {
-					System.out.println("wrong");
+					System.out.println("Please enter a number.");
 				}
 			}
 		}
-		loginScreen.closeBoard();
 	}
+	
 	/**
 	 * Checks that an input can be parsed and is greater than 2. 
 	 * @param loginScreen
 	 * @return
 	 */
-	private static int checkNumber(Menu loginScreen) {
-		int input = Integer.parseInt(loginScreen.getInput());
+	private static int checkNumber(String loginOption) {
+		int input = Integer.parseInt(loginOption);
 		User currUser = null;
 		while (input > 2) {
 			System.out.println("Invalid input. Please enter 1 or 2:");

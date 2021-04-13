@@ -39,11 +39,15 @@ public class Account {
 	 *            Amount of money for depositing
 	 * @throws IOException
 	 */
-	public void depositMoney(double amount) throws IOException {
-		this.balance += amount;
-		this.userRepo.updateBalance(this);
+	public boolean depositMoney(double amount) throws IOException {
+		if (amount > 0) {
+			this.balance += amount;
+			this.userRepo.updateBalance(this);
+			return true;
+		}
+		return false;
 	}
-
+	
 	/**
 	 * Withdraws money from an account, if there are sufficient funds for given
 	 * amount
@@ -54,7 +58,7 @@ public class Account {
 	 * @throws IOException
 	 */
 	public boolean withdrawMoney(double amount) throws IOException {
-		if (amount > this.balance) {
+		if (amount > this.balance || amount < 0 ) {
 			return false;
 		} else {
 			this.balance -= amount;
@@ -72,11 +76,19 @@ public class Account {
 	 *            user to receive money
 	 * @throws IOException
 	 */
-	public void sendMoney(double amount, Account accountReceive) throws IOException {
-		this.withdrawMoney(amount);
-		accountReceive.getAccountNum();
-		accountReceive.setBalance();
-		accountReceive.depositMoney(amount);
+	public boolean sendMoney(double amount, Account accountReceive) throws IOException {
+		boolean sufficientFunds = this.withdrawMoney(amount);
+		int receiverAccountNum =  accountReceive.getAccountNum();
+		if (sufficientFunds == true && receiverAccountNum!= 0) {
+			accountReceive.getAccountNum();
+			accountReceive.setBalance();
+			accountReceive.depositMoney(amount);
+			return true;
+		}	
+		if (receiverAccountNum==0) {
+			this.depositMoney(amount);
+		}
+		return false;
 	}
 
 	/**

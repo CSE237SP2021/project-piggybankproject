@@ -29,6 +29,7 @@ public class ActionPage {
 				checking(userInput);
 			}
 		}
+		activePage.keyBoardIn.close();
 	}
 
 	/**
@@ -36,26 +37,39 @@ public class ActionPage {
 	 * 
 	 * @throws IOException
 	 */
-	private static void transferMoney() throws IOException {
+	private static boolean transferMoney() throws IOException {
 		System.out.println("How much would you like to send?");
-		double amount = Double.parseDouble(getInput());
+		String input = getInput();
+		boolean valid = validDollarAmount(input);
+		while (valid == false) {
+			input = getInput();
+			valid = validDollarAmount(input);
+		}
+		double amount = Double.parseDouble(input);
 		System.out.println("Please give the username of who you would like to send this money to");
 		String username = getInput();
-		if (userrepo.userExists(username)) {
-			if (account.getBalance() > amount) {
-				User receiver = new User(username, "masterKey");
-				Account accountReceive = new Account(receiver);
-				account.sendMoney(amount, accountReceive);
-				sessionLog.add("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
-
-			} else {
-				System.out.println("Insufficient Funds");
-			}
-		} else {
-			System.out.println("Invalid user.");
+		User receiver = new User(username, "masterKey");
+		Account accountReceive = new Account(receiver);
+		boolean success = account.sendMoney(amount, accountReceive);
+		while(!success) {
+			System.out.println("Either insufficient funds or this user does not exist.");
+			System.out.println("How much would you like to send?");
+			amount = Double.parseDouble(getInput());
+			System.out.println("Please give the username of who you would like to send this money to");
+			username = getInput();
+			receiver = new User(username, "masterKey");
+			accountReceive = new Account(receiver);
+			success = account.sendMoney(amount, accountReceive);
 		}
+		sessionLog.add("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
+		return true;
 	}
 
+	/**
+	 * Checks that user input is a number between 1-5. 
+	 * @param userInput
+	 * @throws IOException
+	 */
 	private static void checking(String userInput) throws IOException {
 		try {
 			int attempt = Integer.parseInt(userInput);
@@ -69,23 +83,8 @@ public class ActionPage {
 		}
 	}
 
-	//PRETTY SURE WE CAN GET RID OF THIS???
 	/**
-	 * Checks to see that someone returns a number that is not 1, 2, or 3.
-	 * 
-	 * @param attempt
-	 * @return
-	 */
-	private static int checkWrongNumber(int attempt) {
-		while (attempt < 0 || attempt > 3) {
-			System.out.println("Invalid input. Please enter a number 1-5");
-			attempt = Integer.parseInt(getInput());
-		}
-		return attempt;
-	}
-
-	/**
-	 * Deposits, withdraws, or views balance depending on user input to the question
+	 * Deposits, withdraws, or views balance depending on user input to the question.
 	 * 
 	 * @param userChoice
 	 * @throws IOException
@@ -113,14 +112,21 @@ public class ActionPage {
 	 * @throws IOException
 	 */
 	private static void withdraw() throws IOException {
-		System.out.println("How much money would you like to withdraw?");
-		double amount = Double.parseDouble(getInput());
-		boolean successfulWithdrawal = account.withdrawMoney(amount);
+		boolean validInput = false;
+		int amount = 0;
+		String input = "";
+		while (!validInput) {
+			System.out.println("How much money would you like to withdraw?");
+			input = getInput();
+			validInput = validDollarAmount(input);
+		}
+		double withdrawAmount = Double.parseDouble(input);
+		boolean successfulWithdrawal = account.withdrawMoney(withdrawAmount);
 		if (successfulWithdrawal == false) {
 			System.out.println("Insufficient Funds for this Withdrawal Amount");
 		} else {
-			System.out.println("You have successfully withdrawn $" + amount + " from your account!");
-			sessionLog.add("Withdrew $" + amount + " - balance: $" + account.getBalance());
+			System.out.println("You have successfully withdrawn $" + withdrawAmount + " from your account!");
+			sessionLog.add("Withdrew $" + withdrawAmount + " - balance: $" + account.getBalance());
 		}
 	}
 
@@ -130,22 +136,37 @@ public class ActionPage {
 	 * @throws IOException
 	 */
 	private static void deposit() throws IOException {
-		System.out.println("How much money would you like to deposit?");
 		boolean validInput = false;
+		int amount = 0;
+		String input = "";
 		while (!validInput) {
-			try {
-				double amount = Double.parseDouble(getInput());
-				while (amount < 0) {
-					System.out.println("Please enter a positive amount of money:");
-					amount = Double.parseDouble(getInput());
-				}
-				validInput = true;
-				account.depositMoney(amount);
-				sessionLog.add("deposited $" + amount + " - balance: $" + account.getBalance());
-
-			} catch (NumberFormatException e) {
-				System.out.println("Please enter a positive amount of money:");
+			System.out.println("How much money would you like to deposit?");
+			input = getInput();
+			validInput = validDollarAmount(input);
+		}
+		double depositAmount = Double.parseDouble(input);
+		account.depositMoney(depositAmount);
+		sessionLog.add("deposited $" + depositAmount + " - balance: $" + account.getBalance());
+	}
+	
+	/**
+	 * Checks that user input is a positive number.
+	 * @param input
+	 * @return
+	 */
+	private static boolean validDollarAmount(String input) {
+		try {
+			double amount = Double.parseDouble(input);
+			if (amount < 0) {
+				System.out.println("Invalid Amount. Please enter a positive number.");
+				return false;
 			}
+			else {
+				return true;
+			}
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid Amount. Please enter a number.");
+			return false;
 		}
 	}
 
@@ -157,14 +178,17 @@ public class ActionPage {
 		sessionLog.add("checked balance - balance: $" + account.getBalance());
 	}
 
-	private static String getInput() {
-		return keyBoardIn.nextLine();
-	}
-
+	/**
+	 * Retrieves and prints log for current user session. 
+	 */
 	private static void viewLog() {
 		System.out.println("Log for current session:");
 		for (int i = 0; i < sessionLog.size(); i++) {
 			System.out.println(sessionLog.get(i));
 		}
+	}
+	
+	private static String getInput() {
+		return keyBoardIn.nextLine();
 	}
 }
