@@ -52,7 +52,7 @@ public class ActionPage {
 		Account accountReceive = new Account(receiver);
 		boolean success = account.sendMoney(amount, accountReceive);
 		while(!success) {
-			System.out.println("Either insufficient funds or this user does not exist.");
+			
 			System.out.println("How much would you like to send?");
 			amount = Double.parseDouble(getInput());
 			System.out.println("Please give the username of who you would like to send this money to");
@@ -61,6 +61,7 @@ public class ActionPage {
 			accountReceive = new Account(receiver);
 			success = account.sendMoney(amount, accountReceive);
 		}
+		System.out.println("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
 		sessionLog.add("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
 		return true;
 	}
@@ -79,7 +80,12 @@ public class ActionPage {
 			}
 			decideAction(attempt);
 		} catch (NumberFormatException e) {
-			System.out.println("Invalid input. Please enter a number 1-5");
+			if(userInput.equals("exit")) {
+				System.out.println("Returning to Main Menu");
+			} else {
+				System.out.println("Invalid input. Please enter a number 1-5");
+			}
+			
 		}
 	}
 

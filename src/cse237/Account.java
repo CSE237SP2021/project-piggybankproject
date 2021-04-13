@@ -79,14 +79,23 @@ public class Account {
 	public boolean sendMoney(double amount, Account accountReceive) throws IOException {
 		boolean sufficientFunds = this.withdrawMoney(amount);
 		int receiverAccountNum =  accountReceive.getAccountNum();
-		if (sufficientFunds == true && receiverAccountNum!= 0) {
+		if (sufficientFunds == true && receiverAccountNum!= 0 && receiverAccountNum!=this.getAccountNum()) {
 			accountReceive.getAccountNum();
 			accountReceive.setBalance();
 			accountReceive.depositMoney(amount);
 			return true;
 		}	
-		if (receiverAccountNum==0) {
+		if ((receiverAccountNum==0 || receiverAccountNum == this.getAccountNum()) && sufficientFunds==true) {
 			this.depositMoney(amount);
+			if(receiverAccountNum==0) {
+				System.out.println("This user does not exist"); 
+				
+			} else {
+				System.out.println("You cannot transfer to yourself"); 
+			}
+		}
+		if(!sufficientFunds) {
+			System.out.println("Insufficient Funds"); 
 		}
 		return false;
 	}

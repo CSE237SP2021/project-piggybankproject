@@ -17,7 +17,11 @@ public class UserRepo {
 		this.accountTracker = new File(accountFile);
 		this.usernameTracker = new File(usernameFile);
 	}
-
+/**
+ * Goes through the file contents of accounts to see if an account exists
+ * @param accountNumber
+ * @return true if the account exists, false otherwise
+ */
 	public boolean accountExists(int accountNumber) {
 		try {
 			String accountList = getFileContents("accounts.txt");
@@ -71,7 +75,12 @@ public class UserRepo {
 		readUsers.close();
 		return false;
 	}
-
+/**
+ * Checks to see if a password is correct for a specific account
+ * @param username
+ * @param password
+ * @return true if the password is correct, false otherwise
+ */
 	public boolean correctPassword(String username, String password) {
 		Scanner readUsers;
 		try {

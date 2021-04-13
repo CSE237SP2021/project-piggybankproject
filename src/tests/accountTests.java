@@ -28,6 +28,7 @@ class accountTests {
 		} 
 	}
 	
+	@Test
 	void checkBalanceUpdate() throws IOException {
 		int username = (int)(Math.random() *100000000 * Math.random());
 		int password = (int)(Math.random() * 10000000 * Math.random()); 
@@ -38,6 +39,9 @@ class accountTests {
 		account.depositMoney(400);
 		assertTrue(account.getBalance() == 10400); 
 		account.withdrawMoney(200); 
-		assertTrue(account.getBalance() == 10200); 
+		assertTrue(account.getBalance() == 10200);  
+	
 	}
+	
+	
 }
