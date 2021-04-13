@@ -35,9 +35,10 @@ public class Menu {
 		Menu loginScreen = new Menu();
 		loginScreen.login();
 	}
-	
+
 	/**
-	 * Checking user input to either login or create new profile, validating input, & allowing them to exit. 
+	 * Checking user input to either login or create new profile, validating input,
+	 * & allowing them to exit.
 	 * 
 	 * @throws IOException
 	 */
@@ -48,7 +49,7 @@ public class Menu {
 			loginOption = getInput();
 			if (!loginOption.equals("exit")) {
 				try {
-					int input = checkNumber(loginOption);
+					int input = checkLoginNumber(loginOption);
 					loginOrCreate(this, input);
 					closeBoard();
 					break;
@@ -58,24 +59,26 @@ public class Menu {
 			}
 		}
 	}
-	
+
 	/**
-	 * Checks that an input can be parsed and is greater than 2. 
+	 * Checks that an input can be parsed and is either 1 or 2.
+	 * 
 	 * @param loginScreen
 	 * @return
 	 */
-	private static int checkNumber(String loginOption) {
+	private static int checkLoginNumber(String loginOption) {
 		int input = Integer.parseInt(loginOption);
 		User currUser = null;
-		while (input > 2) {
+		while (input > 2 || input < 1) {
 			System.out.println("Invalid input. Please enter 1 or 2:");
 			input = Integer.parseInt(getInput());
 		}
 		return input;
 	}
-	
+
 	/**
-	 * Depending on user input, either log the user in or create a new account. 
+	 * Depending on user input, either log the user in or create a new account.
+	 * 
 	 * @param loginScreen
 	 * @param input
 	 * @throws IOException
@@ -164,13 +167,10 @@ public class Menu {
 		Account newAccount = new Account(currUser);
 		try {
 			int accountNum = newAccount.generateAccountNum();
-
 			System.out.println(
 					"Account Creation Successful. Please restart the application to login. Your account number is "
 							+ accountNum);
-
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -180,7 +180,8 @@ public class Menu {
 	 */
 	private static void displayMainMenu() {
 		System.out.println("Welcome to the piggyBank!");
-		System.out.println("Please enter 1. to login or 2. to create a new profile");
+		System.out.println("To finish your session please type 'exit' on the main menu.");
+		System.out.println("To start, please enter 1. to login or 2. to create a new profile");
 	}
 
 	private static String getInput() {
@@ -203,7 +204,7 @@ public class Menu {
 	 */
 	public User createUser(String username, String password) {
 		try {
-			// https://www.baeldung.com/java-append-to-file
+			// Reference: https://www.baeldung.com/java-append-to-file
 			if (trackUsers.userExists(username)) {
 				System.out.println("Username is already taken");
 				return null;
@@ -216,7 +217,6 @@ public class Menu {
 			userList.close();
 			return newUser;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

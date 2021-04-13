@@ -16,6 +16,7 @@ class userlogintests {
 		boolean match = userLogin.checkPassword("password"); 
 		assertTrue(match); 
 	}
+	
 	@Test
 	void userLoginFailure() {
 		User userLogin = new User("username","password1");

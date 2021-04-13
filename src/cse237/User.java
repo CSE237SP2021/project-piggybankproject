@@ -15,7 +15,7 @@ public class User {
 	 * Makes sure that the inputed password matches their stores password.
 	 * 
 	 * @param passwordAttempt
-	 *            User's password input when promted
+	 *            User's password input when prompted
 	 * @return true if password matches as it should
 	 */
 	public boolean checkPassword(String passwordAttempt) {

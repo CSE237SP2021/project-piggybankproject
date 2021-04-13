@@ -23,7 +23,6 @@ class accountTests {
 			int accountNum = account.generateAccountNum();
 			assertEquals(accountNum, account.getAccountNum()); 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}
@@ -40,8 +39,5 @@ class accountTests {
 		assertTrue(account.getBalance() == 10400); 
 		account.withdrawMoney(200); 
 		assertTrue(account.getBalance() == 10200);  
-	
 	}
-	
-	
 }

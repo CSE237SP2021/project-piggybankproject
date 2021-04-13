@@ -20,7 +20,7 @@ public class ActionPage {
 		ActionPage activePage = new ActionPage(account);
 		account.setBalance();
 		String actionText = "Enter: \n1 deposit \n2 withdraw \n3 view current balance"
-				+ " \n4 transfer money \n5 view session log";
+				+ " \n4 transfer money \n5 view session log \n6 type 'exit' to finish your session.";
 		String userInput = "";
 		while (!userInput.equals("exit")) {
 			System.out.println(actionText);
@@ -33,41 +33,8 @@ public class ActionPage {
 	}
 
 	/**
-	 * Sends money to another account
+	 * Checks that user input is a number between 1-5.
 	 * 
-	 * @throws IOException
-	 */
-	private static boolean transferMoney() throws IOException {
-		System.out.println("How much would you like to send?");
-		String input = getInput();
-		boolean valid = validDollarAmount(input);
-		while (valid == false) {
-			input = getInput();
-			valid = validDollarAmount(input);
-		}
-		double amount = Double.parseDouble(input);
-		System.out.println("Please give the username of who you would like to send this money to");
-		String username = getInput();
-		User receiver = new User(username, "masterKey");
-		Account accountReceive = new Account(receiver);
-		boolean success = account.sendMoney(amount, accountReceive);
-		while(!success) {
-			
-			System.out.println("How much would you like to send?");
-			amount = Double.parseDouble(getInput());
-			System.out.println("Please give the username of who you would like to send this money to");
-			username = getInput();
-			receiver = new User(username, "masterKey");
-			accountReceive = new Account(receiver);
-			success = account.sendMoney(amount, accountReceive);
-		}
-		System.out.println("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
-		sessionLog.add("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
-		return true;
-	}
-
-	/**
-	 * Checks that user input is a number between 1-5. 
 	 * @param userInput
 	 * @throws IOException
 	 */
@@ -80,17 +47,17 @@ public class ActionPage {
 			}
 			decideAction(attempt);
 		} catch (NumberFormatException e) {
-			if(userInput.equals("exit")) {
+			if (userInput.equals("exit")) {
 				System.out.println("Returning to Main Menu");
 			} else {
 				System.out.println("Invalid input. Please enter a number 1-5");
 			}
-			
 		}
 	}
 
 	/**
-	 * Deposits, withdraws, or views balance depending on user input to the question.
+	 * Deposits, withdraws, or views balance depending on user input to the
+	 * question.
 	 * 
 	 * @param userChoice
 	 * @throws IOException
@@ -112,31 +79,6 @@ public class ActionPage {
 	}
 
 	/**
-	 * Asks user to enter withdrawal amount and withdraws it if there are sufficient
-	 * funds in account.
-	 * 
-	 * @throws IOException
-	 */
-	private static void withdraw() throws IOException {
-		boolean validInput = false;
-		int amount = 0;
-		String input = "";
-		while (!validInput) {
-			System.out.println("How much money would you like to withdraw?");
-			input = getInput();
-			validInput = validDollarAmount(input);
-		}
-		double withdrawAmount = Double.parseDouble(input);
-		boolean successfulWithdrawal = account.withdrawMoney(withdrawAmount);
-		if (successfulWithdrawal == false) {
-			System.out.println("Insufficient Funds for this Withdrawal Amount");
-		} else {
-			System.out.println("You have successfully withdrawn $" + withdrawAmount + " from your account!");
-			sessionLog.add("Withdrew $" + withdrawAmount + " - balance: $" + account.getBalance());
-		}
-	}
-
-	/**
 	 * Deposits desired amount into account.
 	 * 
 	 * @throws IOException
@@ -152,27 +94,32 @@ public class ActionPage {
 		}
 		double depositAmount = Double.parseDouble(input);
 		account.depositMoney(depositAmount);
-		sessionLog.add("deposited $" + depositAmount + " - balance: $" + account.getBalance());
+		System.out.println("You have successfully deposited $" + depositAmount + " to your account!");
+		sessionLog.add("Deposited $" + depositAmount + " - balance: $" + account.getBalance());
 	}
-	
+
 	/**
-	 * Checks that user input is a positive number.
-	 * @param input
-	 * @return
+	 * Asks user to enter withdrawal amount and withdraws it if there are sufficient
+	 * funds in account.
+	 * 
+	 * @throws IOException
 	 */
-	private static boolean validDollarAmount(String input) {
-		try {
-			double amount = Double.parseDouble(input);
-			if (amount < 0) {
-				System.out.println("Invalid Amount. Please enter a positive number.");
-				return false;
-			}
-			else {
-				return true;
-			}
-		} catch (NumberFormatException e) {
-			System.out.println("Invalid Amount. Please enter a number.");
-			return false;
+	private static void withdraw() throws IOException {
+		boolean validInput = false;
+		int amount = 0;
+		String input = "";
+		while (!validInput) {
+			System.out.println("How much money would you like to withdraw?");
+			input = getInput();
+			validInput = validDollarAmount(input);
+		}
+		double withdrawAmount = Double.parseDouble(input); 
+		boolean successfulWithdrawal = account.withdrawMoney(withdrawAmount);
+		if (successfulWithdrawal == false) {
+			System.out.println("Insufficient Funds for this Withdrawal Amount");
+		} else {
+			System.out.println("You have successfully withdrawn $" + withdrawAmount + " from your account!");
+			sessionLog.add("Withdrew $" + withdrawAmount + " - balance: $" + account.getBalance());
 		}
 	}
 
@@ -185,7 +132,42 @@ public class ActionPage {
 	}
 
 	/**
-	 * Retrieves and prints log for current user session. 
+	 * Sends money to another account
+	 * 
+	 * @throws IOException
+	 */
+	private static boolean transferMoney() throws IOException {
+		System.out.println("How much would you like to send?");
+		String input = getInput();
+		boolean valid = validDollarAmount(input);
+		//Checks to see that input for transferring is a valid positive number.  
+		while (valid == false) {
+			input = getInput();
+			valid = validDollarAmount(input);
+		}
+		double amount = Double.parseDouble(input);
+		System.out.println("Please give the username of who you would like to send this money to");
+		String username = getInput();
+		User receiver = new User(username, "masterKey");
+		Account accountReceive = new Account(receiver);
+		boolean success = account.sendMoney(amount, accountReceive);
+		//Checks to see if transfer was successful. If not successful, asks for new input. 
+		while (!success) {
+			System.out.println("How much would you like to send?");
+			amount = Double.parseDouble(getInput());
+			System.out.println("Please give the username of who you would like to send this money to:");
+			username = getInput();
+			receiver = new User(username, "masterKey");
+			accountReceive = new Account(receiver);
+			success = account.sendMoney(amount, accountReceive);
+		}
+		System.out.println("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
+		sessionLog.add("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
+		return true;
+	}
+
+	/**
+	 * Retrieves and prints log for current user session in the same run of the program.
 	 */
 	private static void viewLog() {
 		System.out.println("Log for current session:");
@@ -193,7 +175,28 @@ public class ActionPage {
 			System.out.println(sessionLog.get(i));
 		}
 	}
-	
+
+	/**
+	 * Checks that user input is a positive number.
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static boolean validDollarAmount(String input) {
+		try {
+			double amount = Double.parseDouble(input);
+			if (amount < 0) {
+				System.out.println("Invalid Amount. Please enter a positive number.");
+				return false;
+			} else {
+				return true;
+			}
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid Amount. Please enter a number.");
+			return false;
+		}
+	}
+
 	private static String getInput() {
 		return keyBoardIn.nextLine();
 	}
