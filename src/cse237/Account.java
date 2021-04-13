@@ -27,7 +27,6 @@ public class Account {
 		try {
 			this.accountGenerator = new FileWriter("accounts.txt", true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -47,7 +46,7 @@ public class Account {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Withdraws money from an account, if there are sufficient funds for given
 	 * amount
@@ -58,7 +57,7 @@ public class Account {
 	 * @throws IOException
 	 */
 	public boolean withdrawMoney(double amount) throws IOException {
-		if (amount > this.balance || amount < 0 ) {
+		if (amount > this.balance || amount < 0) {
 			return false;
 		} else {
 			this.balance -= amount;
@@ -78,24 +77,26 @@ public class Account {
 	 */
 	public boolean sendMoney(double amount, Account accountReceive) throws IOException {
 		boolean sufficientFunds = this.withdrawMoney(amount);
-		int receiverAccountNum =  accountReceive.getAccountNum();
-		if (sufficientFunds == true && receiverAccountNum!= 0 && receiverAccountNum!=this.getAccountNum()) {
+		int receiverAccountNum = accountReceive.getAccountNum();
+		//Ensures that there are sufficient funds for transfer, receiver exists (account number is not 0), and not sending money to oneself.
+		if (sufficientFunds == true && receiverAccountNum != 0 && receiverAccountNum != this.getAccountNum()) {
 			accountReceive.getAccountNum();
 			accountReceive.setBalance();
 			accountReceive.depositMoney(amount);
 			return true;
-		}	
-		if ((receiverAccountNum==0 || receiverAccountNum == this.getAccountNum()) && sufficientFunds==true) {
+		}
+		//If receiver does not exist, return money back to sender that was originally withdrawn.
+		if ((receiverAccountNum == 0 || receiverAccountNum == this.getAccountNum()) && sufficientFunds == true) {
 			this.depositMoney(amount);
-			if(receiverAccountNum==0) {
-				System.out.println("This user does not exist"); 
-				
+			if (receiverAccountNum == 0) {
+				System.out.println("This user does not exist.");
+
 			} else {
-				System.out.println("You cannot transfer to yourself"); 
+				System.out.println("You cannot transfer money to yourself.");
 			}
 		}
-		if(!sufficientFunds) {
-			System.out.println("Insufficient Funds"); 
+		if (!sufficientFunds) {
+			System.out.println("Insufficient Funds.");
 		}
 		return false;
 	}
@@ -125,6 +126,11 @@ public class Account {
 		return this.balance;
 	}
 
+	/**
+	 * Retruns the account number for a user's account.
+	 * 
+	 * @return
+	 */
 	public int getAccountNum() {
 		Scanner readAccounts;
 		try {
@@ -133,7 +139,6 @@ public class Account {
 				String[] accountAndUser = readAccounts.nextLine().split(",");
 				String username = accountAndUser[0];
 				String accountNumberString = accountAndUser[1];
-
 				if (username.equals(user.getUsername())) {
 					int accountNum = Integer.parseInt(accountNumberString);
 					this.accountNumber = accountNum;
@@ -141,7 +146,6 @@ public class Account {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;

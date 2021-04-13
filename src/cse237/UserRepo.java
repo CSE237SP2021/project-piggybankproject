@@ -12,16 +12,17 @@ public class UserRepo {
 	public File usernameTracker;
 
 	public UserRepo(String balanceFile, String accountFile, String usernameFile) {
-		// TODO Auto-generated constructor stub
 		this.balanceTracker = new File(balanceFile);
 		this.accountTracker = new File(accountFile);
 		this.usernameTracker = new File(usernameFile);
 	}
-/**
- * Goes through the file contents of accounts to see if an account exists
- * @param accountNumber
- * @return true if the account exists, false otherwise
- */
+
+	/**
+	 * Goes through the file contents of accounts to see if an account exists
+	 * 
+	 * @param accountNumber
+	 * @return true if the account exists, false otherwise
+	 */
 	public boolean accountExists(int accountNumber) {
 		try {
 			String accountList = getFileContents("accounts.txt");
@@ -33,16 +34,14 @@ public class UserRepo {
 				if (Integer.parseInt(accountInfoArray[1]) == accountNumber) {
 					return true;
 				} else {
-					// keep looking
+					// keep searching through next lines
 				}
 			}
 			return false;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 
 	/**
@@ -53,7 +52,7 @@ public class UserRepo {
 	 * @return true if username already exists, false otherwise
 	 */
 	public boolean userExists(String username) {
-		// https://www.w3schools.com/java/java_files_read.asp
+		// Reference: https://www.w3schools.com/java/java_files_read.asp
 		Scanner readUsers;
 		try {
 			// go through file of existing usernames and see if it exists
@@ -67,20 +66,20 @@ public class UserRepo {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-
 			return false;
 		}
 		readUsers.close();
 		return false;
 	}
-/**
- * Checks to see if a password is correct for a specific account
- * @param username
- * @param password
- * @return true if the password is correct, false otherwise
- */
+
+	/**
+	 * Checks to see if a password is correct for a specific account
+	 * 
+	 * @param username
+	 * @param password
+	 * @return true if the password is correct, false otherwise
+	 */
 	public boolean correctPassword(String username, String password) {
 		Scanner readUsers;
 		try {
@@ -96,9 +95,7 @@ public class UserRepo {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-
 			return false;
 		}
 		readUsers.close();
@@ -124,7 +121,6 @@ public class UserRepo {
 				newLine = accountInfoArray[0] + "," + accountInfoArray[1];
 			}
 		}
-
 		fileInfo = fileInfo.replace(oldLine, newLine);
 		FileWriter updateBalance = new FileWriter("balance.txt", false);
 		updateBalance.write(fileInfo);

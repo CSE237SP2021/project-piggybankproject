@@ -27,9 +27,7 @@ class transferTests {
 		assertTrue(senderAccount.getBalance()==initialSendAmount); 
 		assertTrue(initialReceiveAmount+200 == receiveAccount.getBalance()); 
 	}
-		
-
-	 
+	
 	@Test
 	void testUnsuccessfulTransferInsufficientFunds() throws IOException {
 		User sender = new User("personA", "personA"); 
@@ -108,6 +106,7 @@ class transferTests {
 		assertFalse(success);
 		assertTrue(senderAccount.getBalance()==initialSendAmount); 
 	}
+	
 	@Test
 	void testUnsuccessfulTransferInsufficientBalanceAndFakePerson() throws IOException{
 		User sender = new User("personA", "personA"); 
@@ -123,6 +122,7 @@ class transferTests {
 		assertFalse(success);
 		assertTrue(senderAccount.getBalance()==initialSendAmount); 
 	}
+	
 	@Test
 	void testUnsuccessfulTransferInsufficientBalanceAndSelf() throws IOException{
 		User sender = new User("personA", "personA"); 
