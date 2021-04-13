@@ -1,1 +1,13 @@
-# cse237-project
+# CSE237 Piggy Bank Project
+
+*Note to reviewer: Please look at the code and README in the development branch, NOT the main branch! 
+
+The Piggy Bank Project is an application that is meant to simulate a simple banking application that allows users to interact with their accounts and manage their basic finances. This application is geared towards an audience that is newer to the banking system, as its features include the fundamental structure of most bank accounts. 
+
+In its current form (i.e. Iteration 2), the application allows a user to create a profile or sign in with their chosen username and password. Our program does not allow a user to make a profile with a username that has already been taken. The login will only be successful if their inputted password matches their originally chosen password. These usernames and passwords are stored in a .txt file, along with an account number. Once the user has made a profile/signed in, the user is brought to an account page, where they can choose to view their account statistics (i.e. balance), deposit money into their account, withdraw from their account (if they have sufficient funds in their account), transfer money to another user, or view a log of their current session on the app of all transactions. The program will validate the input taken into these questions, so that user input is logical for the prompted action. For instance, the user can only input corresponding numbers for which type of transaction they will complete (i.e. only numbers 1-5 for that prompt, etc.), as well as only positive integer values for monetary amounts for depositing/withdrawal/transferring, and more. This covers the user stories completed in this iteration, along with what we had completed in Iteration 1, all shown in our 'done' section on Github. Once the user is done with their chosen actions (depositing, withdrawing, viewing), they should type 'exit' to complete their session.  
+
+We believe that this structure covers essential actions that could be taken by a user. In the final iteration, we plan to expand these ideas, including having the option for a user to add multiple users to a single account, have the option to update a user's password, transfer money to multiple users at once, and delete an account. 
+
+To run this application, please use the run.sh file in the general repository. Enter ./run.sh to run this file.
+
+We are looking forward to seeing how this project will progress in its final stage! 
