@@ -20,7 +20,8 @@ public class ActionPage {
 		ActionPage activePage = new ActionPage(account);
 		account.setBalance();
 		String actionText = "Enter: \n1 deposit \n2 withdraw \n3 view current balance"
-				+ " \n4 transfer money \n5 view session log \n6 type 'exit' to finish your session.";
+				+ " \n4 transfer money \n5 view session log \n6 To add a new user to your main account "
+				+ " \n7 type 'exit' to finish your session.";
 		String userInput = "";
 		while (!userInput.equals("exit")) {
 			System.out.println(actionText);
@@ -41,8 +42,8 @@ public class ActionPage {
 	private static void checking(String userInput) throws IOException {
 		try {
 			int attempt = Integer.parseInt(userInput);
-			while (attempt < 0 || attempt > 5) {
-				System.out.println("Invalid input. Please enter a number 1-5");
+			while (attempt < 0 || attempt > 8) {
+				System.out.println("Invalid input. Please enter a number 1-6");
 				attempt = Integer.parseInt(getInput());
 			}
 			decideAction(attempt);
@@ -50,11 +51,12 @@ public class ActionPage {
 			if (userInput.equals("exit")) {
 				System.out.println("Returning to Main Menu");
 			} else {
-				System.out.println("Invalid input. Please enter a number 1-5");
+				System.out.println("Invalid input. Please enter a number 1-6");
 			}
 		}
 	}
 
+	
 	/**
 	 * Deposits, withdraws, or views balance depending on user input to the
 	 * question.
@@ -73,6 +75,8 @@ public class ActionPage {
 			transferMoney();
 		} else if (userChoice == 5) {
 			viewLog();
+		} else if(userChoice==6){
+			addApprovedUser(); 
 		} else {
 			System.out.println("Invalid entry");
 		}
@@ -84,6 +88,8 @@ public class ActionPage {
 	 * @throws IOException
 	 */
 	private static void deposit() throws IOException {
+		Account accountToUse = actionOnOtherAccount(); 
+		accountToUse.setBalance(); 
 		boolean validInput = false;
 		int amount = 0;
 		String input = "";
@@ -93,9 +99,9 @@ public class ActionPage {
 			validInput = validDollarAmount(input);
 		}
 		double depositAmount = Double.parseDouble(input);
-		account.depositMoney(depositAmount);
-		System.out.println("You have successfully deposited $" + depositAmount + " to your account!");
-		sessionLog.add("Deposited $" + depositAmount + " - balance: $" + account.getBalance());
+		accountToUse.depositMoney(depositAmount);
+		System.out.println("You have successfully deposited $" + depositAmount + " to " + accountToUse.getAccountNum());
+		sessionLog.add("Deposited $" + depositAmount + " into account " + accountToUse.getAccountNum() + " - balance: $" + accountToUse.getBalance());
 	}
 
 	/**
@@ -105,6 +111,8 @@ public class ActionPage {
 	 * @throws IOException
 	 */
 	private static void withdraw() throws IOException {
+		Account accountToUse = actionOnOtherAccount(); 
+		accountToUse.setBalance(); 
 		boolean validInput = false;
 		int amount = 0;
 		String input = "";
@@ -114,21 +122,24 @@ public class ActionPage {
 			validInput = validDollarAmount(input);
 		}
 		double withdrawAmount = Double.parseDouble(input); 
-		boolean successfulWithdrawal = account.withdrawMoney(withdrawAmount);
+		boolean successfulWithdrawal = accountToUse.withdrawMoney(withdrawAmount);
 		if (successfulWithdrawal == false) {
 			System.out.println("Insufficient Funds for this Withdrawal Amount");
 		} else {
-			System.out.println("You have successfully withdrawn $" + withdrawAmount + " from your account!");
-			sessionLog.add("Withdrew $" + withdrawAmount + " - balance: $" + account.getBalance());
+			System.out.println("You have successfully withdrawn $" + withdrawAmount + " from " + accountToUse.getAccountNum());
+			sessionLog.add("Withdrew $" + withdrawAmount + " from account "+ accountToUse.getAccountNum() +  " - balance: $" + accountToUse.getBalance());
 		}
 	}
 
 	/**
 	 * Print out current user balance.
+	 * @throws IOException 
 	 */
-	private static void viewBalance() {
-		System.out.println("Your current account balance is: $" + account.getBalance());
-		sessionLog.add("checked balance - balance: $" + account.getBalance());
+	private static void viewBalance() throws IOException {
+		Account accountToUse = actionOnOtherAccount(); 
+		accountToUse.setBalance(); 
+		System.out.println("Your current account balance on account " + accountToUse.getAccountNum() + " is: $" + accountToUse.getBalance());
+		sessionLog.add("checked balance on account " + accountToUse.getAccountNum() + " - balance: $" + accountToUse.getBalance());
 	}
 
 	/**
@@ -137,7 +148,7 @@ public class ActionPage {
 	 * @throws IOException
 	 */
 	private static boolean transferMoney() throws IOException {
-		System.out.println("How much would you like to send?");
+		System.out.println("How much would you like to send? Please note you may only do this from your main account.");
 		String input = getInput();
 		boolean valid = validDollarAmount(input);
 		//Checks to see that input for transferring is a valid positive number.  
@@ -163,6 +174,20 @@ public class ActionPage {
 		}
 		System.out.println("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
 		sessionLog.add("Transfered $" + amount + " to " + username + " - balance: $" + account.getBalance());
+		return true;
+	}
+	
+	private static boolean addApprovedUser() throws IOException{
+		System.out.println("Please enter the username of the person you would like to add to your account. Please note you may only do this from your main account."); 
+
+		boolean userExists = false; 
+		String userToAdd = ""; 
+		while(userExists==false) {
+			userToAdd = getInput(); 
+			userExists = userrepo.userExists(userToAdd); 
+		}
+		userrepo.addApprovedUser(account, userToAdd);
+		System.out.println("User was successfully added."); 
 		return true;
 	}
 
@@ -196,8 +221,54 @@ public class ActionPage {
 			return false;
 		}
 	}
+	
+	private static Account actionOnOtherAccount() throws IOException {
+		System.out.println("Please type 0 if you'd like to do this transaction on your main account or 1 if you'd like to do it on an account that you are a subUser");
+		int accountChoice = checkBinaryValue(getInput()); 
+		if(accountChoice==0) {
+			return account; 
+		} else {
+			
+		
+		String accountNumberString = ""; 
+		int accountNum=0; 
+		boolean validAccountNumber = false; 
+		while(!validAccountNumber) {
+			System.out.println("Please enter the account Number you want to use"); 
+			accountNumberString=getInput(); 
+			if(validDollarAmount(accountNumberString)) {
+				accountNum = Integer.parseInt(accountNumberString); 
+			}
+			if(userrepo.isAnApprovedUser(accountNum, account.getUsername())) {
+				validAccountNumber=true; 
+			}
+		}
 
+		System.out.println("Approved make a transaction on account " + accountNum); 
+		String usernameOnSubAccount = userrepo.usernameOnAccount(accountNum);
+		User userOnSubAccount = new User(usernameOnSubAccount, "masterkey"); 
+		Account accountToMakeTransaction = new Account(userOnSubAccount);
+		
+		accountToMakeTransaction.getAccountNum(); 
+		return accountToMakeTransaction; 
+		}
+	}
 	private static String getInput() {
 		return keyBoardIn.nextLine();
+	}
+	/**
+	 * Checks that an input can be parsed and is either 0 or 1.
+	 * 
+	 * @param String to be checked
+	 * @return
+	 */
+	private static int checkBinaryValue(String loginOption) {
+		int input = Integer.parseInt(loginOption);
+		User currUser = null;
+		while (input > 1 || input < 0) {
+			System.out.println("Invalid input. Please enter 0 or 1:");
+			input = Integer.parseInt(getInput());
+		}
+		return input;
 	}
 }

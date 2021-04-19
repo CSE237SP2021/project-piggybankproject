@@ -10,11 +10,13 @@ public class UserRepo {
 	public File balanceTracker;
 	public File accountTracker;
 	public File usernameTracker;
+	public File approvedUserTracker;
 
 	public UserRepo(String balanceFile, String accountFile, String usernameFile) {
 		this.balanceTracker = new File(balanceFile);
 		this.accountTracker = new File(accountFile);
 		this.usernameTracker = new File(usernameFile);
+		this.approvedUserTracker = new File("approvedUsers.txt"); 
 	}
 
 	/**
@@ -144,5 +146,49 @@ public class UserRepo {
 		}
 		scan.close();
 		return fileContents;
+	}
+	public void addApprovedUser(Account Account, String username) throws IOException{
+		
+		FileWriter fw = new FileWriter(approvedUserTracker, true);
+		fw.append(Account.getAccountNum() + "," + username + "," + "\n"); 
+		
+		fw.close(); 
+	}
+	
+	public String usernameOnAccount(int accountNumber) throws IOException {
+		String fileInfo = getFileContents("accounts.txt"); 
+		Scanner scan = new Scanner(fileInfo); 
+		while(scan.hasNextLine()) {
+			String line = scan.nextLine();
+			String[] lineArray = line.split(","); 
+			if(Integer.parseInt(lineArray[1])==accountNumber) {
+				return lineArray[0]; 
+			} 
+		}
+		return ""; 
+	}
+	
+	
+	/**
+	 * 
+	 * @param accountNum
+	 * @return
+	 * @throws IOException
+	 */
+	public boolean isAnApprovedUser(int accountNum, String username) throws IOException {
+		String fileInfo = getFileContents("approvedUsers.txt"); 
+		Scanner scan = new Scanner(fileInfo); 
+		
+		while(scan.hasNextLine()) {
+			String line = scan.nextLine();
+			String[] lineArray = line.split(","); 
+			
+			if(Integer.parseInt(lineArray[0])==accountNum && lineArray[1].equals(username)) {
+				
+				return true; 
+			} 
+		}
+		System.out.println("You are not an approved user for account " + accountNum); 
+		return false;
 	}
 }

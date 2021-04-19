@@ -30,6 +30,10 @@ public class Account {
 			e.printStackTrace();
 		}
 	}
+	
+	public String getUsername() {
+		return this.user.getUsername(); 
+	}
 
 	/**
 	 * Deposits money into an account
@@ -57,6 +61,7 @@ public class Account {
 	 * @throws IOException
 	 */
 	public boolean withdrawMoney(double amount) throws IOException {
+		System.out.println(this.getBalance()); 
 		if (amount > this.balance || amount < 0) {
 			return false;
 		} else {
@@ -168,4 +173,5 @@ public class Account {
 		addNewAccount.close();
 		return accountNum;
 	}
+	
 }
