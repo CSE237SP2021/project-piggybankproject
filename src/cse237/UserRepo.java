@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class UserRepo {
@@ -166,6 +167,26 @@ public class UserRepo {
 			} 
 		}
 		return ""; 
+	}
+	
+	public LinkedList <String> approvedAccounts(String username) throws IOException {
+		String fileInfo = getFileContents("approvedUsers.txt"); 
+		int i = 0; 
+		LinkedList <String> approvedAccounts = new LinkedList<String>(); 
+		Scanner scan = new Scanner(fileInfo); 
+		while(scan.hasNextLine()) {
+			String line = scan.nextLine(); 
+			String[] lineArray =line.split(",");
+			if(lineArray[1].equals(username)) {
+				i=i+1; 
+				approvedAccounts.addLast(i + ": " + lineArray[0] + ", " + lineArray[1]);
+			}
+			
+		}
+		if(i==0) {
+			approvedAccounts.add("You have no other approved accounts."); 
+		}
+		return approvedAccounts;
 	}
 	
 	

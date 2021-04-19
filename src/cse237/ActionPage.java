@@ -2,6 +2,7 @@ package cse237;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class ActionPage {
@@ -221,7 +222,11 @@ public class ActionPage {
 			return false;
 		}
 	}
-	
+	/**
+	 * 
+	 * @return the account that a user wants to use
+	 * @throws IOException
+	 */
 	private static Account actionOnOtherAccount() throws IOException {
 		System.out.println("Please type 0 if you'd like to do this transaction on your main account or 1 if you'd like to do it on an account that you are a subUser");
 		int accountChoice = checkBinaryValue(getInput()); 
@@ -229,28 +234,39 @@ public class ActionPage {
 			return account; 
 		} else {
 			
-		
+		LinkedList <String> approvedAccounts = userrepo.approvedAccounts(account.getUsername()); 
+		System.out.println("Below is the list of your approved account numbers and the owner of that account"); 
+		System.out.println(approvedAccounts.toString()); 
 		String accountNumberString = ""; 
 		int accountNum=0; 
 		boolean validAccountNumber = false; 
 		while(!validAccountNumber) {
-			System.out.println("Please enter the account Number you want to use"); 
+			System.out.println("Please enter the account Number you want to use or enter 0 to use your main account"); 
 			accountNumberString=getInput(); 
 			if(validDollarAmount(accountNumberString)) {
 				accountNum = Integer.parseInt(accountNumberString); 
 			}
-			if(userrepo.isAnApprovedUser(accountNum, account.getUsername())) {
-				validAccountNumber=true; 
+			if(accountNum!=0) {
+				if(userrepo.isAnApprovedUser(accountNum, account.getUsername()) ) {
+					validAccountNumber=true; 
+				}	
+			} else {
+				validAccountNumber = true; 
 			}
+			
 		}
-
-		System.out.println("Approved make a transaction on account " + accountNum); 
-		String usernameOnSubAccount = userrepo.usernameOnAccount(accountNum);
-		User userOnSubAccount = new User(usernameOnSubAccount, "masterkey"); 
-		Account accountToMakeTransaction = new Account(userOnSubAccount);
+		if(accountNum!=0) {
+			System.out.println("Approved make a transaction on account " + accountNum); 
+			String usernameOnSubAccount = userrepo.usernameOnAccount(accountNum);
+			User userOnSubAccount = new User(usernameOnSubAccount, "masterkey"); 
+			Account accountToMakeTransaction = new Account(userOnSubAccount);
+			
+			accountToMakeTransaction.getAccountNum(); 
+			return accountToMakeTransaction; 
+		} else {
+			return account; 
+		}
 		
-		accountToMakeTransaction.getAccountNum(); 
-		return accountToMakeTransaction; 
 		}
 	}
 	private static String getInput() {

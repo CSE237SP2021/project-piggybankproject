@@ -61,7 +61,7 @@ public class Account {
 	 * @throws IOException
 	 */
 	public boolean withdrawMoney(double amount) throws IOException {
-		System.out.println(this.getBalance()); 
+
 		if (amount > this.balance || amount < 0) {
 			return false;
 		} else {
