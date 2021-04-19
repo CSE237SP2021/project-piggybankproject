@@ -4,7 +4,7 @@ newestUser,abcde
 1.8045959124057785E7,password
 1996332.014687692,password
 748991,147005
-max.mazursky,alskdjflakj
+max.mazursky,mazursky
 newUser1,abcde
 sender,sendMoney
 receiver,receiveMoney
@@ -14,3 +14,11 @@ personB,personB
 zncasdcnaeaiwnceaiwunciawuneciawu,password
 2471025.8746752045,password
 228929,36833
+6.4327989782012686E7,password
+631837,56069
+6936645.632282756,password
+558090,550168
+1.9542375390002575E7,password
+55518,305218
+hannah1,hannah1
+hannah2,hannah2
