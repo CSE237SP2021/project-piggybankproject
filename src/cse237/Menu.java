@@ -112,7 +112,7 @@ public class Menu {
 	 * 
 	 * @return User object, assuming successful login
 	 */
-	private User userLogin() {
+	User userLogin() {
 		// already have a profile
 		User currUser = null;
 		System.out.println("Please enter your username below:");
