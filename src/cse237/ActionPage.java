@@ -9,12 +9,14 @@ public class ActionPage {
 	private static Account account;
 	private static Scanner keyBoardIn;
 	private static UserRepo userrepo;
+	private static Menu menu;
 	private static ArrayList<String> sessionLog = new ArrayList<String>();
 
 	public ActionPage(Account account) {
 		this.account = account;
 		this.keyBoardIn = new Scanner(System.in);
 		this.userrepo = new UserRepo("balance.txt", "account.txt", "usernames.txt");
+		this.menu = new Menu();
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -22,7 +24,7 @@ public class ActionPage {
 		account.setBalance();
 		String actionText = "Enter: \n1 deposit \n2 withdraw \n3 view current balance"
 				+ " \n4 transfer money \n5 view session log \n6 To add a new user to your main account "
-				+ " \n7 type 'exit' to finish your session.";
+				+ " \n7 To change your password" + "\n8 type 'exit' to finish your session.";
 		String userInput = "";
 		while (!userInput.equals("exit")) {
 			System.out.println(actionText);
@@ -78,7 +80,11 @@ public class ActionPage {
 			viewLog();
 		} else if(userChoice==6){
 			addApprovedUser(); 
-		} else {
+		} 
+		else if (userChoice==7) {
+			inputNewPassword();
+		}
+		else {
 			System.out.println("Invalid entry");
 		}
 	}
@@ -191,7 +197,18 @@ public class ActionPage {
 		System.out.println("User was successfully added."); 
 		return true;
 	}
-
+	
+	/**
+	 * Asks user for a new password and updates it in the text files. 
+	 * @throws IOException
+	 */
+	private static void inputNewPassword() throws IOException {
+		System.out.println("Please enter a new password:");
+		String newPassword = getInput();
+		userrepo.changePassword(account.getUsername(), newPassword);
+		System.out.println("You have successfully updated your password.");
+	}
+	
 	/**
 	 * Retrieves and prints log for current user session in the same run of the program.
 	 */

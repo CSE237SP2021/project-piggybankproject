@@ -104,7 +104,53 @@ public class UserRepo {
 		readUsers.close();
 		return false;
 	}
+	
+	/**
+	 * Changes user password by finding their username in the .txt file and updating the entry line.
+	 * @param username
+	 * @param updatedPassword
+	 * @throws IOException
+	 */
+	public void changePassword(String username, String updatedPassword) throws IOException {
+		String usernameInfo = getFileContents("usernames.txt"); 
+		Scanner scan = new Scanner(usernameInfo);
+		String oldLine = "";
+		String newLine = "";
+		while (scan.hasNextLine()) {
+			String usernamePasswordEntry= scan.nextLine();
+			String[] accountInfoArray = usernamePasswordEntry.split(",");
+			if (accountInfoArray[0].equals(username)) {
+				oldLine = usernamePasswordEntry;
+				newLine = username + "," + updatedPassword;
+			}
+			usernameInfo = usernameInfo.replace(oldLine, newLine);
+			FileWriter updatePassword = new FileWriter("usernames.txt", false);
+			updatePassword.write(usernameInfo);
+			updatePassword.close();
+		}
+		
+		/**
+		 * Scanner readUsers;
+		
+		try {
+			String usersList = getFileContents("usernames.txt");
+			Scanner readUsersList = new Scanner(usersList);
+			while (readUsersList.hasNextLine()) {
+				String[] userInfo = readUsersList.nextLine().split(",");
+				if (userInfo[0].equals(username)) {
+					userInfo[1] = updatedPassword;
+				} else {
+					// keep going
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 */
+	}
 
+	
 	/**
 	 * This simply updates the balance in the balance.txt file
 	 * 
