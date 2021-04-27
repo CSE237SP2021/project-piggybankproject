@@ -7,8 +7,6 @@ newestUser,abcde
 newUser1,abcde
 sender,sendMoney
 receiver,receiveMoney
-personA,personA
-personB,personB
 0,password
 zncasdcnaeaiwnceaiwunciawuneciawu,password
 2471025.8746752045,password
@@ -48,3 +46,16 @@ user124,user124
 1696958.974377669,password
 1.3500241598521285E7,password
 708146.329676709,password
+1417409.827854305,password
+94481,16057
+5.244229634482307E7,newPassword
+2498803.1142237308,password
+1.3328924459113762E7,password
+6577116.919526091,password
+personB,personB
+personA,personA
+4.685640177389366E7,password
+505117,212250
+1.437179268529935E7,newPassword
+3.3351036908891007E7,password
+124920.41195346435,password

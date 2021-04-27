@@ -43,25 +43,7 @@ class multipleUserTests {
 		assertFalse(succesful); 
 	}
 	
-	@Test
-	
-	void testAbilityToDepositSuccessOnOtherApprovedAccount() throws IOException{
-		Menu mainmenu = new Menu(); 
-		double randomUsername = Math.random()*Math.random()*100000000; 
-		String user_to_add = String.valueOf(randomUsername);
-		String username_2 = "personB"; 
-		mainmenu.createUser(user_to_add, "password"); 
-		User main_user = new User(username_2, "password"); 
-		User sub_user = new User(user_to_add, "password"); 
-		Account main_account = new Account(main_user); 
-		main_account.getAccountNum(); 
-		UserRepo userRepo = new UserRepo("balance.txt", "accounts.txt", "usernames.txt");
-		userRepo.addApprovedUser(main_account, user_to_add); 
-		Account person_added_account = new Account(sub_user);
-		LinkedList <String> list =  userRepo.approvedAccounts(user_to_add); 
-		System.out.println(list.toString()); 
-		assertTrue(list.contains(String.valueOf(main_account.getAccountNum()))); 
-		
-	}
 
+	
+	
 }

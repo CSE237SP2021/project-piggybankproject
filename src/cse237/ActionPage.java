@@ -275,7 +275,7 @@ public class ActionPage {
 			return account; 
 		} else {
 			LinkedList <String> approvedAccounts = userrepo.approvedAccounts(account.getUsername()); 
-			System.out.println("Below is the list of your approved account numbers and the owner of that account"); 
+			System.out.println("Below is the list of your approved account numbers"); 
 			System.out.println(approvedAccounts.toString()); 
 			String accountNumberString = ""; 
 			int accountNum=0; 

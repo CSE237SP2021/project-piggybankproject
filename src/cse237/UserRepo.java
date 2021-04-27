@@ -111,6 +111,7 @@ public class UserRepo {
 	 * @throws IOException
 	 */
 	public void changePassword(String username, String updatedPassword) throws IOException {
+	
 		String usernameInfo = getFileContents("usernames.txt"); 
 		Scanner scan = new Scanner(usernameInfo);
 		String oldLine = "";
@@ -122,11 +123,12 @@ public class UserRepo {
 				oldLine = usernamePasswordEntry;
 				newLine = username + "," + updatedPassword;
 			}
+		}
 			usernameInfo = usernameInfo.replace(oldLine, newLine);
 			FileWriter updatePassword = new FileWriter("usernames.txt", false);
 			updatePassword.write(usernameInfo);
 			updatePassword.close();
-		}
+		
 	}
 
 	/**
@@ -202,12 +204,13 @@ public class UserRepo {
 		while (scan.hasNextLine()) {
 			String approvedLine = scan.nextLine();
 			String[] accountInfoArray = approvedLine.split(",");
-			if (accountInfoArray[0].equals(accountNumber)) {
+			if (accountInfoArray[0].equals(accountNumber) || accountInfoArray[1].equals(username)) {
 				oldLine = approvedLine;
 				newLine = "xxx";
+				approvedText = approvedText.replace(oldLine, newLine);
+				approvedText = approvedText.replace("xxx\n", "");
 			}
-			approvedText = approvedText.replace(oldLine, newLine);
-			approvedText = approvedText.replace("xxx\n", "");
+	
 			FileWriter updateApproved = new FileWriter("approvedUsers.txt", false);
 			updateApproved.write(approvedText);
 			updateApproved.close();
@@ -311,7 +314,7 @@ public class UserRepo {
 			String[] lineArray = line.split(",");
 			if (lineArray[1].equals(username)) {
 				i = i + 1;
-				approvedAccounts.addLast(i + ": " + lineArray[0] + ", " + lineArray[1]);
+				approvedAccounts.addLast(i + ": " + lineArray[0]);
 			}
 		}
 		if (i == 0) {
