@@ -30,13 +30,9 @@ public class Account {
 			e.printStackTrace();
 		}
 	}
-	
-	public String getUsername() {
-		return this.user.getUsername(); 
-	}
 
 	/**
-	 * Deposits money into an account
+	 * Deposits money into an account and updates account balance. 
 	 * 
 	 * @param amount
 	 *            Amount of money for depositing
@@ -53,7 +49,7 @@ public class Account {
 
 	/**
 	 * Withdraws money from an account, if there are sufficient funds for given
-	 * amount
+	 * amount.
 	 * 
 	 * @param amount
 	 *            Amount of money intended for withdrawal
@@ -72,7 +68,7 @@ public class Account {
 	}
 
 	/**
-	 * Sends a specified amount of money from active user to another
+	 * Sends a specified amount of money from active user to another. 
 	 * 
 	 * @param amount
 	 *            Money to be sent to new user
@@ -83,14 +79,16 @@ public class Account {
 	public boolean sendMoney(double amount, Account accountReceive) throws IOException {
 		boolean sufficientFunds = this.withdrawMoney(amount);
 		int receiverAccountNum = accountReceive.getAccountNum();
-		//Ensures that there are sufficient funds for transfer, receiver exists (account number is not 0), and not sending money to oneself.
+		// Ensures that there are sufficient funds for transfer, receiver exists
+		// (account number is not 0), and not sending money to oneself.
 		if (sufficientFunds == true && receiverAccountNum != 0 && receiverAccountNum != this.getAccountNum()) {
 			accountReceive.getAccountNum();
 			accountReceive.setBalance();
 			accountReceive.depositMoney(amount);
 			return true;
 		}
-		//If receiver does not exist, return money back to sender that was originally withdrawn.
+		// If receiver does not exist, return money back to sender that was originally
+		// withdrawn.
 		if ((receiverAccountNum == 0 || receiverAccountNum == this.getAccountNum()) && sufficientFunds == true) {
 			this.depositMoney(amount);
 			if (receiverAccountNum == 0) {
@@ -132,7 +130,7 @@ public class Account {
 	}
 
 	/**
-	 * Retruns the account number for a user's account.
+	 * Returns the account number for a user's account.
 	 * 
 	 * @return
 	 */
@@ -157,7 +155,7 @@ public class Account {
 	}
 
 	/**
-	 * This function will randomly generate an account number for a new account
+	 * This function will randomly generate an account number for a new account and write it to file. 
 	 * 
 	 * @return a randomly generated account Number
 	 * @throws IOException
@@ -174,4 +172,7 @@ public class Account {
 		return accountNum;
 	}
 	
+	public String getUsername() {
+		return this.user.getUsername();
+	}
 }

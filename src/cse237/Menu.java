@@ -69,7 +69,7 @@ public class Menu {
 	private static int checkLoginNumber(String loginOption) {
 		int input = Integer.parseInt(loginOption);
 		User currUser = null;
-		while (input > 2 || input < 1) {
+		while (input < 1 || input > 2) {
 			System.out.println("Invalid input. Please enter 1 or 2:");
 			input = Integer.parseInt(getInput());
 		}
@@ -86,10 +86,10 @@ public class Menu {
 	private static void loginOrCreate(Menu loginScreen, int input) throws IOException {
 		User currUser;
 		if (input == 1) {
-			// existing user login
+			// Existing user login
 			loginScreen.existingUserLogin();
 		} else if (input == 2) {
-			// new user;
+			// New user
 			currUser = null;
 			loginScreen.createNewUserPrompt();
 		} else {
@@ -184,14 +184,6 @@ public class Menu {
 		System.out.println("To start, please enter 1. to login or 2. to create a new profile");
 	}
 
-	private static String getInput() {
-		return keyBoardIn.nextLine();
-	}
-
-	private void closeBoard() {
-		keyBoardIn.close();
-	}
-
 	/**
 	 * Creates a user from their desired username & password, unless the username
 	 * already exists on file
@@ -220,5 +212,13 @@ public class Menu {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	private static String getInput() {
+		return keyBoardIn.nextLine();
+	}
+
+	private void closeBoard() {
+		keyBoardIn.close();
 	}
 }

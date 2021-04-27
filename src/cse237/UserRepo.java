@@ -17,9 +17,12 @@ public class UserRepo {
 		this.balanceTracker = new File(balanceFile);
 		this.accountTracker = new File(accountFile);
 		this.usernameTracker = new File(usernameFile);
-		this.approvedUserTracker = new File("approvedUsers.txt"); 
+		this.approvedUserTracker = new File("approvedUsers.txt");
 	}
 
+	
+	//testing comment - ignore 
+	
 	/**
 	 * Goes through the file contents of accounts to see if an account exists
 	 * 
@@ -104,21 +107,25 @@ public class UserRepo {
 		readUsers.close();
 		return false;
 	}
-	
+
 	/**
-	 * Changes user password by finding their username in the .txt file and updating the entry line.
+	 * Changes user password by finding their username in the .txt file and updating
+	 * the entry line.
+	 * 
 	 * @param username
 	 * @param updatedPassword
 	 * @throws IOException
 	 */
 	public void changePassword(String username, String updatedPassword) throws IOException {
-		String usernameInfo = getFileContents("usernames.txt"); 
+		String usernameInfo = getFileContents("usernames.txt");
 		Scanner scan = new Scanner(usernameInfo);
 		String oldLine = "";
 		String newLine = "";
 		while (scan.hasNextLine()) {
-			String usernamePasswordEntry= scan.nextLine();
+			String usernamePasswordEntry = scan.nextLine();
 			String[] accountInfoArray = usernamePasswordEntry.split(",");
+			// Find place in .txt file where the username is held, replace the password with
+			// given change
 			if (accountInfoArray[0].equals(username)) {
 				oldLine = usernamePasswordEntry;
 				newLine = username + "," + updatedPassword;
@@ -128,29 +135,8 @@ public class UserRepo {
 			updatePassword.write(usernameInfo);
 			updatePassword.close();
 		}
-		
-		/**
-		 * Scanner readUsers;
-		
-		try {
-			String usersList = getFileContents("usernames.txt");
-			Scanner readUsersList = new Scanner(usersList);
-			while (readUsersList.hasNextLine()) {
-				String[] userInfo = readUsersList.nextLine().split(",");
-				if (userInfo[0].equals(username)) {
-					userInfo[1] = updatedPassword;
-				} else {
-					// keep going
-				}
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 */
 	}
 
-	
 	/**
 	 * This simply updates the balance in the balance.txt file
 	 * 
@@ -194,68 +180,84 @@ public class UserRepo {
 		scan.close();
 		return fileContents;
 	}
-	public void addApprovedUser(Account Account, String username) throws IOException{
-		
+
+	/**
+	 * Adds approved user to an account on .txt file.
+	 * 
+	 * @param Account
+	 * @param username
+	 * @throws IOException
+	 */
+	public void addApprovedUser(Account Account, String username) throws IOException {
 		FileWriter fw = new FileWriter(approvedUserTracker, true);
-		fw.append(Account.getAccountNum() + "," + username + "," + "\n"); 
-		
-		fw.close(); 
+		fw.append(Account.getAccountNum() + "," + username + "," + "\n");
+		fw.close();
 	}
-	
+
+	/**
+	 * Returns username of associate account number from accounts.txt.
+	 * 
+	 * @param accountNumber
+	 * @return
+	 * @throws IOException
+	 */
 	public String usernameOnAccount(int accountNumber) throws IOException {
-		String fileInfo = getFileContents("accounts.txt"); 
-		Scanner scan = new Scanner(fileInfo); 
-		while(scan.hasNextLine()) {
+		String fileInfo = getFileContents("accounts.txt");
+		Scanner scan = new Scanner(fileInfo);
+		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
-			String[] lineArray = line.split(","); 
-			if(Integer.parseInt(lineArray[1])==accountNumber) {
-				return lineArray[0]; 
-			} 
+			String[] lineArray = line.split(",");
+			if (Integer.parseInt(lineArray[1]) == accountNumber) {
+				return lineArray[0];
+			}
 		}
-		return ""; 
+		return "";
 	}
-	
-	public LinkedList <String> approvedAccounts(String username) throws IOException {
-		String fileInfo = getFileContents("approvedUsers.txt"); 
-		int i = 0; 
-		LinkedList <String> approvedAccounts = new LinkedList<String>(); 
-		Scanner scan = new Scanner(fileInfo); 
-		while(scan.hasNextLine()) {
-			String line = scan.nextLine(); 
-			String[] lineArray =line.split(",");
-			if(lineArray[1].equals(username)) {
-				i=i+1; 
+
+	/**
+	 * Returns a list of all accounts a user has been approved for/added to.
+	 * 
+	 * @param username
+	 * @return
+	 * @throws IOException
+	 */
+	public LinkedList<String> approvedAccounts(String username) throws IOException {
+		String fileInfo = getFileContents("approvedUsers.txt");
+		int i = 0;
+		LinkedList<String> approvedAccounts = new LinkedList<String>();
+		Scanner scan = new Scanner(fileInfo);
+		while (scan.hasNextLine()) {
+			String line = scan.nextLine();
+			String[] lineArray = line.split(",");
+			if (lineArray[1].equals(username)) {
+				i = i + 1;
 				approvedAccounts.addLast(i + ": " + lineArray[0] + ", " + lineArray[1]);
 			}
-			
 		}
-		if(i==0) {
-			approvedAccounts.add("You have no other approved accounts."); 
+		if (i == 0) {
+			approvedAccounts.add("You have no other approved accounts.");
 		}
 		return approvedAccounts;
 	}
-	
-	
+
 	/**
+	 * Declares whether a user has been approved to use a certain account.
 	 * 
 	 * @param accountNum
 	 * @return
 	 * @throws IOException
 	 */
 	public boolean isAnApprovedUser(int accountNum, String username) throws IOException {
-		String fileInfo = getFileContents("approvedUsers.txt"); 
-		Scanner scan = new Scanner(fileInfo); 
-		
-		while(scan.hasNextLine()) {
+		String fileInfo = getFileContents("approvedUsers.txt");
+		Scanner scan = new Scanner(fileInfo);
+		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
-			String[] lineArray = line.split(","); 
-			
-			if(Integer.parseInt(lineArray[0])==accountNum && lineArray[1].equals(username)) {
-				
-				return true; 
-			} 
+			String[] lineArray = line.split(",");
+			if (Integer.parseInt(lineArray[0]) == accountNum && lineArray[1].equals(username)) {
+				return true;
+			}
 		}
-		System.out.println("You are not an approved user for account " + accountNum); 
+		System.out.println("You are not an approved user for account " + accountNum);
 		return false;
 	}
 }
