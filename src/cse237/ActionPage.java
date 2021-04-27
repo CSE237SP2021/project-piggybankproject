@@ -22,9 +22,10 @@ public class ActionPage {
 	public static void main(String[] args) throws IOException {
 		ActionPage activePage = new ActionPage(account);
 		account.setBalance();
-		String actionText = "Enter: \n1 deposit \n2 withdraw \n3 view current balance"
-				+ " \n4 transfer money \n5 view session log \n6 To add a new user to your main account "
-				+ " \n7 To change your password" + "\n8 type 'exit' to finish your session.";
+		String actionText = "\n*********************\n\nEnter: \n1 deposit \n2 withdraw \n3 view current balance"
+				+ " \n4 transfer money \n5 view session log \n6 add a new user to your main account"
+				+ " \n7 change your password" + "\n8 delete your account" + "\n'exit' to exit";
+	
 		String userInput = "";
 		while (!userInput.equals("exit")) {
 			System.out.println(actionText);
@@ -37,7 +38,7 @@ public class ActionPage {
 	}
 
 	/**
-	 * Checks that user input is a number between 1-5.
+	 * Checks that user input is a number between 1-9. (9 is easter egg)
 	 * 
 	 * @param userInput
 	 * @throws IOException
@@ -45,8 +46,8 @@ public class ActionPage {
 	private static void checking(String userInput) throws IOException {
 		try {
 			int attempt = Integer.parseInt(userInput);
-			while (attempt < 0 || attempt > 8) {
-				System.out.println("Invalid input. Please enter a number 1-6");
+			while (attempt < 0 || attempt > 9) {
+				System.out.println("Invalid input. Please enter a number 1-8");
 				attempt = Integer.parseInt(getInput());
 			}
 			decideAction(attempt);
@@ -54,7 +55,7 @@ public class ActionPage {
 			if (userInput.equals("exit")) {
 				System.out.println("Returning to Main Menu");
 			} else {
-				System.out.println("Invalid input. Please enter a number 1-6");
+				System.out.println("Invalid input. Please enter a number 1-8");
 			}
 		}
 	}
@@ -78,11 +79,14 @@ public class ActionPage {
 			transferMoney();
 		} else if (userChoice == 5) {
 			viewLog();
-		} else if(userChoice==6){
+		} else if(userChoice == 6){
 			addApprovedUser(); 
-		} 
-		else if (userChoice==7) {
+		} else if (userChoice== 7) {
 			inputNewPassword();
+		} else if (userChoice == 8) {
+			deleteAccountPrompt();
+		} else if (userChoice == 9) {
+			easterEgg();
 		}
 		else {
 			System.out.println("Invalid entry");
@@ -209,6 +213,24 @@ public class ActionPage {
 		System.out.println("You have successfully updated your password.");
 	}
 	
+	/*
+	 * Asks user if they want to delete their account then calls delete function
+	 */
+	private static void deleteAccountPrompt() throws IOException {
+		System.out.println("Are you sure you want to delete this account? Type 'yes' to confirm.");
+		String answer  = "";
+		answer = getInput();
+		if(answer.equals("yes")) {
+			userrepo.deleteAccount(account.getUsername());
+			System.out.println("Account successfully deleted. Goodbye.");
+			System.exit(0);
+		} else {
+			System.out.print("You did not enter 'yes' so your account was not deleted.");
+		}
+		
+		
+	}
+	
 	/**
 	 * Retrieves and prints log for current user session in the same run of the program.
 	 */
@@ -303,5 +325,9 @@ public class ActionPage {
 			input = Integer.parseInt(getInput());
 		}
 		return input;
+	}
+	
+	private static void easterEgg() {
+		System.out.println("You found a secret! Bring me a little water nowwwww Bring me a little water sylvieeeee");
 	}
 }

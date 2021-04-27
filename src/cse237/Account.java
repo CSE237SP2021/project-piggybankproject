@@ -132,7 +132,7 @@ public class Account {
 	}
 
 	/**
-	 * Retruns the account number for a user's account.
+	 * Returns the account number for a user's account.
 	 * 
 	 * @return
 	 */

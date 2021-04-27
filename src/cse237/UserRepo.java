@@ -17,7 +17,7 @@ public class UserRepo {
 		this.balanceTracker = new File(balanceFile);
 		this.accountTracker = new File(accountFile);
 		this.usernameTracker = new File(usernameFile);
-		this.approvedUserTracker = new File("approvedUsers.txt"); 
+		this.approvedUserTracker = new File("approvedUsers.txt");
 	}
 
 	/**
@@ -50,8 +50,7 @@ public class UserRepo {
 	/**
 	 * Checks to see if an entered username already exists on file.
 	 * 
-	 * @param username
-	 *            Username to see if it exists already in database
+	 * @param username Username to see if it exists already in database
 	 * @return true if username already exists, false otherwise
 	 */
 	public boolean userExists(String username) {
@@ -104,7 +103,7 @@ public class UserRepo {
 		readUsers.close();
 		return false;
 	}
-	
+
 	/**
 	 * Changes user password by finding their username in the .txt file and updating the entry line.
 	 * @param username
@@ -128,29 +127,111 @@ public class UserRepo {
 			updatePassword.write(usernameInfo);
 			updatePassword.close();
 		}
-		
-		/**
-		 * Scanner readUsers;
-		
-		try {
-			String usersList = getFileContents("usernames.txt");
-			Scanner readUsersList = new Scanner(usersList);
-			while (readUsersList.hasNextLine()) {
-				String[] userInfo = readUsersList.nextLine().split(",");
-				if (userInfo[0].equals(username)) {
-					userInfo[1] = updatedPassword;
-				} else {
-					// keep going
-				}
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 */
 	}
 
-	
+	/**
+	 * Deletes account by finding the username in the .txt file and updating
+	 * the entry line.
+	 * 
+	 * @param username
+	 * @param updatedPassword
+	 * @throws IOException
+	 */
+	public void deleteAccount(String username) throws IOException {
+		String usernameInfo = getFileContents("usernames.txt");
+		Scanner scan = new Scanner(usernameInfo);
+		String oldLine = "";
+		String newLine = "";
+		while (scan.hasNextLine()) {
+			String usernameLine = scan.nextLine();
+			String[] accountInfoArray = usernameLine.split(",");
+			if (accountInfoArray[0].equals(username)) {
+				oldLine = usernameLine;
+				newLine = "xxx";
+				System.out.println("USERNAME LINE " + usernameLine);
+			}
+			usernameInfo = usernameInfo.replace(oldLine, newLine);
+			usernameInfo = usernameInfo.replace("xxx\n", "");
+			FileWriter updateUsers = new FileWriter("usernames.txt", false);
+			updateUsers.write(usernameInfo);
+			updateUsers.close();
+		}
+		
+		
+		String accountsText = getFileContents("accounts.txt");
+		scan = new Scanner(accountsText);
+		oldLine = "";
+		newLine = "";
+		String accountNumber = "";
+		while (scan.hasNextLine()) {
+			String accountLine = scan.nextLine();
+			String[] accountInfoArray = accountLine.split(",");
+			if (accountInfoArray[0].equals(username)) {
+				accountNumber = accountInfoArray[1];
+				oldLine = accountLine;
+				newLine = "xxx";
+				System.out.println("Account number: " + accountNumber);
+				System.out.println(accountLine);
+			}
+			accountsText = accountsText.replace(oldLine, newLine);
+			accountsText = accountsText.replace("xxx\n", "");
+			FileWriter updateAccounts = new FileWriter("accounts.txt", false);
+			updateAccounts.write(accountsText);
+			updateAccounts.close();
+		}
+		
+		String balanceText = getFileContents("balance.txt");
+		scan = new Scanner(balanceText);
+		oldLine = "";
+		newLine = "";
+		while (scan.hasNextLine()) {
+			String balanceLine = scan.nextLine();
+			String[] accountInfoArray = balanceLine.split(",");
+			if (accountInfoArray[0].equals(accountNumber)) {
+				oldLine = balanceLine;
+				newLine = "xxx";
+				System.out.println("Balance line: " + balanceLine);
+			}
+			balanceText = balanceText.replace(oldLine, newLine);
+			balanceText = balanceText.replace("xxx\n", "");
+			FileWriter updateBalance = new FileWriter("balance.txt", false);
+			updateBalance.write(balanceText);
+			updateBalance.close();
+		}
+		
+		String approvedText = getFileContents("approvedUsers.txt");
+		scan = new Scanner(approvedText);
+		oldLine = "";
+		newLine = "";
+		while (scan.hasNextLine()) {
+			String approvedLine = scan.nextLine();
+			String[] accountInfoArray = approvedLine.split(",");
+			if (accountInfoArray[0].equals(accountNumber)) {
+				oldLine = approvedLine;
+				newLine = "xxx";
+				System.out.println("Balance line: " + approvedLine);
+			}
+			approvedText = approvedText.replace(oldLine, newLine);
+			approvedText = approvedText.replace("xxx\n", "");
+			FileWriter updateApproved = new FileWriter("approvedUsers.txt", false);
+			updateApproved.write(approvedText);
+			updateApproved.close();
+		}
+		
+	}
+
+		/**
+		 * Scanner readUsers;
+		 * 
+		 * try { String usersList = getFileContents("usernames.txt"); Scanner
+		 * readUsersList = new Scanner(usersList); while (readUsersList.hasNextLine()) {
+		 * String[] userInfo = readUsersList.nextLine().split(","); if
+		 * (userInfo[0].equals(username)) { userInfo[1] = updatedPassword; } else { //
+		 * keep going } } } catch (IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
+
+
 	/**
 	 * This simply updates the balance in the balance.txt file
 	 * 
@@ -194,48 +275,48 @@ public class UserRepo {
 		scan.close();
 		return fileContents;
 	}
-	public void addApprovedUser(Account Account, String username) throws IOException{
-		
+
+	public void addApprovedUser(Account Account, String username) throws IOException {
+
 		FileWriter fw = new FileWriter(approvedUserTracker, true);
-		fw.append(Account.getAccountNum() + "," + username + "," + "\n"); 
-		
-		fw.close(); 
+		fw.append(Account.getAccountNum() + "," + username + "," + "\n");
+
+		fw.close();
 	}
-	
+
 	public String usernameOnAccount(int accountNumber) throws IOException {
-		String fileInfo = getFileContents("accounts.txt"); 
-		Scanner scan = new Scanner(fileInfo); 
-		while(scan.hasNextLine()) {
+		String fileInfo = getFileContents("accounts.txt");
+		Scanner scan = new Scanner(fileInfo);
+		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
-			String[] lineArray = line.split(","); 
-			if(Integer.parseInt(lineArray[1])==accountNumber) {
-				return lineArray[0]; 
-			} 
+			String[] lineArray = line.split(",");
+			if (Integer.parseInt(lineArray[1]) == accountNumber) {
+				return lineArray[0];
+			}
 		}
-		return ""; 
+		return "";
 	}
-	
-	public LinkedList <String> approvedAccounts(String username) throws IOException {
-		String fileInfo = getFileContents("approvedUsers.txt"); 
-		int i = 0; 
-		LinkedList <String> approvedAccounts = new LinkedList<String>(); 
-		Scanner scan = new Scanner(fileInfo); 
-		while(scan.hasNextLine()) {
-			String line = scan.nextLine(); 
-			String[] lineArray =line.split(",");
-			if(lineArray[1].equals(username)) {
-				i=i+1; 
+
+	public LinkedList<String> approvedAccounts(String username) throws IOException {
+		String fileInfo = getFileContents("approvedUsers.txt");
+		int i = 0;
+		LinkedList<String> approvedAccounts = new LinkedList<String>();
+		Scanner scan = new Scanner(fileInfo);
+		while (scan.hasNextLine()) {
+			String line = scan.nextLine();
+			String[] lineArray = line.split(",");
+			if (lineArray[1].equals(username)) {
+				i = i + 1;
 				approvedAccounts.addLast(i + ": " + lineArray[0] + ", " + lineArray[1]);
 			}
-			
+
 		}
-		if(i==0) {
-			approvedAccounts.add("You have no other approved accounts."); 
+		if (i == 0) {
+			approvedAccounts.add("You have no other approved accounts.");
 		}
 		return approvedAccounts;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param accountNum
@@ -243,19 +324,19 @@ public class UserRepo {
 	 * @throws IOException
 	 */
 	public boolean isAnApprovedUser(int accountNum, String username) throws IOException {
-		String fileInfo = getFileContents("approvedUsers.txt"); 
-		Scanner scan = new Scanner(fileInfo); 
-		
-		while(scan.hasNextLine()) {
+		String fileInfo = getFileContents("approvedUsers.txt");
+		Scanner scan = new Scanner(fileInfo);
+
+		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
-			String[] lineArray = line.split(","); 
-			
-			if(Integer.parseInt(lineArray[0])==accountNum && lineArray[1].equals(username)) {
-				
-				return true; 
-			} 
+			String[] lineArray = line.split(",");
+
+			if (Integer.parseInt(lineArray[0]) == accountNum && lineArray[1].equals(username)) {
+
+				return true;
+			}
 		}
-		System.out.println("You are not an approved user for account " + accountNum); 
+		System.out.println("You are not an approved user for account " + accountNum);
 		return false;
 	}
 }
