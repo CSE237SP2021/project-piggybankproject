@@ -30,10 +30,6 @@ public class Account {
 			e.printStackTrace();
 		}
 	}
-	
-	public String getUsername() {
-		return this.user.getUsername(); 
-	}
 
 	/**
 	 * Deposits money into an account
@@ -83,14 +79,16 @@ public class Account {
 	public boolean sendMoney(double amount, Account accountReceive) throws IOException {
 		boolean sufficientFunds = this.withdrawMoney(amount);
 		int receiverAccountNum = accountReceive.getAccountNum();
-		//Ensures that there are sufficient funds for transfer, receiver exists (account number is not 0), and not sending money to oneself.
+		// Ensures that there are sufficient funds for transfer, receiver exists
+		// (account number is not 0), and not sending money to oneself.
 		if (sufficientFunds == true && receiverAccountNum != 0 && receiverAccountNum != this.getAccountNum()) {
 			accountReceive.getAccountNum();
 			accountReceive.setBalance();
 			accountReceive.depositMoney(amount);
 			return true;
 		}
-		//If receiver does not exist, return money back to sender that was originally withdrawn.
+		// If receiver does not exist, return money back to sender that was originally
+		// withdrawn.
 		if ((receiverAccountNum == 0 || receiverAccountNum == this.getAccountNum()) && sufficientFunds == true) {
 			this.depositMoney(amount);
 			if (receiverAccountNum == 0) {
@@ -125,10 +123,6 @@ public class Account {
 			}
 		}
 		return 0;
-	}
-
-	public double getBalance() {
-		return this.balance;
 	}
 
 	/**
@@ -173,5 +167,12 @@ public class Account {
 		addNewAccount.close();
 		return accountNum;
 	}
-	
+
+	public String getUsername() {
+		return this.user.getUsername();
+	}
+
+	public double getBalance() {
+		return this.balance;
+	}
 }
