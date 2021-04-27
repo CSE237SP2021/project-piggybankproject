@@ -188,7 +188,7 @@ public class ActionPage {
 		return true;
 	}
 	
-	private static boolean addApprovedUser() throws IOException{
+	public static boolean addApprovedUser() throws IOException{
 		System.out.println("Please enter the username of the person you would like to add to your account. Please note you may only do this from your main account."); 
 
 		boolean userExists = false; 

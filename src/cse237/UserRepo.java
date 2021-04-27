@@ -276,12 +276,17 @@ public class UserRepo {
 		return fileContents;
 	}
 
-	public void addApprovedUser(Account Account, String username) throws IOException {
+	public boolean addApprovedUser(Account Account, String username) throws IOException {
+		if(userExists(username)) {
+			FileWriter fw = new FileWriter(approvedUserTracker, true);
+			fw.append(Account.getAccountNum() + "," + username + "," + "\n");
 
-		FileWriter fw = new FileWriter(approvedUserTracker, true);
-		fw.append(Account.getAccountNum() + "," + username + "," + "\n");
-
-		fw.close();
+			fw.close();
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 
 	public String usernameOnAccount(int accountNumber) throws IOException {
