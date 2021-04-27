@@ -217,7 +217,7 @@ public class ActionPage {
 	 * Asks user if they want to delete their account then calls delete function
 	 */
 	private static void deleteAccountPrompt() throws IOException {
-		System.out.println("Are you sure you want to delete this account? Type 'yes' to confirm.");
+		System.out.println("Are you sure you want to delete this account? Type 'yes' to confirm. We ask that you do not delete accounts with usernames of personA, personB, or fakeperson237, since these are used in our testing!");
 		String answer  = "";
 		answer = getInput();
 		if(answer.equals("yes")) {
