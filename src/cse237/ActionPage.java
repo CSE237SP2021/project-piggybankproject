@@ -25,7 +25,6 @@ public class ActionPage {
 		String actionText = "\n*********************\n\nEnter: \n1 deposit \n2 withdraw \n3 view current balance"
 				+ " \n4 transfer money \n5 view session log \n6 add a new user to your main account"
 				+ " \n7 change your password" + "\n8 delete your account" + "\n'exit' to exit";
-	
 		String userInput = "";
 		while (!userInput.equals("exit")) {
 			System.out.println(actionText);
@@ -38,7 +37,7 @@ public class ActionPage {
 	}
 
 	/**
-	 * Checks that user input is a number between 1-9. (9 is easter egg)
+	 * Checks that user input is a number between 1-9. (9 is surprise function!)
 	 * 
 	 * @param userInput
 	 * @throws IOException
@@ -59,7 +58,6 @@ public class ActionPage {
 			}
 		}
 	}
-
 	
 	/**
 	 * Deposits, withdraws, or views balance depending on user input to the
@@ -143,7 +141,7 @@ public class ActionPage {
 	}
 
 	/**
-	 * Print out current user balance.
+	 * Prints out current user balance on account.
 	 * @throws IOException 
 	 */
 	private static void viewBalance() throws IOException {
@@ -188,9 +186,13 @@ public class ActionPage {
 		return true;
 	}
 	
+	/**
+	 * Allows user to add another user to an account using this person's username.
+	 * @return true if user added successfully 
+	 * @throws IOException
+	 */
 	public static boolean addApprovedUser() throws IOException{
 		System.out.println("Please enter the username of the person you would like to add to your account. Please note you may only do this from your main account."); 
-
 		boolean userExists = false; 
 		String userToAdd = ""; 
 		while(userExists==false) {
@@ -213,8 +215,9 @@ public class ActionPage {
 		System.out.println("You have successfully updated your password.");
 	}
 	
-	/*
+	/**
 	 * Asks user if they want to delete their account then calls delete function
+	 * @throws IOException
 	 */
 	private static void deleteAccountPrompt() throws IOException {
 		System.out.println("Are you sure you want to delete this account? Type 'yes' to confirm. We ask that you do not delete accounts with usernames of personA, personB, or fakeperson237, since these are used in our testing!");
@@ -227,8 +230,6 @@ public class ActionPage {
 		} else {
 			System.out.print("You did not enter 'yes' so your account was not deleted.");
 		}
-		
-		
 	}
 	
 	/**
@@ -261,8 +262,9 @@ public class ActionPage {
 			return false;
 		}
 	}
+	
 	/**
-	 * 
+	 * Prompts user to choose an account to perform a transaction on, assuming they are an approved user of this account.
 	 * @return the account that a user wants to use
 	 * @throws IOException
 	 */
@@ -272,45 +274,40 @@ public class ActionPage {
 		if(accountChoice==0) {
 			return account; 
 		} else {
-			
-		LinkedList <String> approvedAccounts = userrepo.approvedAccounts(account.getUsername()); 
-		System.out.println("Below is the list of your approved account numbers and the owner of that account"); 
-		System.out.println(approvedAccounts.toString()); 
-		String accountNumberString = ""; 
-		int accountNum=0; 
-		boolean validAccountNumber = false; 
-		while(!validAccountNumber) {
-			System.out.println("Please enter the account Number you want to use or enter 0 to use your main account"); 
-			accountNumberString=getInput(); 
-			if(validDollarAmount(accountNumberString)) {
-				accountNum = Integer.parseInt(accountNumberString); 
+			LinkedList <String> approvedAccounts = userrepo.approvedAccounts(account.getUsername()); 
+			System.out.println("Below is the list of your approved account numbers and the owner of that account"); 
+			System.out.println(approvedAccounts.toString()); 
+			String accountNumberString = ""; 
+			int accountNum=0; 
+			boolean validAccountNumber = false; 
+			while(!validAccountNumber) {
+				System.out.println("Please enter the account Number you want to use or enter 0 to use your main account"); 
+				accountNumberString=getInput(); 
+				if(validDollarAmount(accountNumberString)) {
+					accountNum = Integer.parseInt(accountNumberString); 
+				}
+				if(accountNum!=0) {
+					if(userrepo.isAnApprovedUser(accountNum, account.getUsername()) ) {
+						validAccountNumber=true; 
+					}	
+				} else {
+					validAccountNumber = true; 
+				}
 			}
 			if(accountNum!=0) {
-				if(userrepo.isAnApprovedUser(accountNum, account.getUsername()) ) {
-					validAccountNumber=true; 
-				}	
+				System.out.println("Approved make a transaction on account " + accountNum); 
+				String usernameOnSubAccount = userrepo.usernameOnAccount(accountNum);
+				User userOnSubAccount = new User(usernameOnSubAccount, "masterkey"); 
+				Account accountToMakeTransaction = new Account(userOnSubAccount);
+
+				accountToMakeTransaction.getAccountNum(); 
+				return accountToMakeTransaction; 
 			} else {
-				validAccountNumber = true; 
+				return account; 
 			}
-			
-		}
-		if(accountNum!=0) {
-			System.out.println("Approved make a transaction on account " + accountNum); 
-			String usernameOnSubAccount = userrepo.usernameOnAccount(accountNum);
-			User userOnSubAccount = new User(usernameOnSubAccount, "masterkey"); 
-			Account accountToMakeTransaction = new Account(userOnSubAccount);
-			
-			accountToMakeTransaction.getAccountNum(); 
-			return accountToMakeTransaction; 
-		} else {
-			return account; 
-		}
-		
 		}
 	}
-	private static String getInput() {
-		return keyBoardIn.nextLine();
-	}
+	
 	/**
 	 * Checks that an input can be parsed and is either 0 or 1.
 	 * 
@@ -327,7 +324,14 @@ public class ActionPage {
 		return input;
 	}
 	
+	private static String getInput() {
+		return keyBoardIn.nextLine();
+	}
+	
+	/**
+	 * Surprise function :)
+	 */
 	private static void easterEgg() {
-		System.out.println("You found a secret! Bring me a little water nowwwww Bring me a little water sylvieeeee");
+		System.out.println("You found a secret!");
 	}
 }

@@ -130,14 +130,15 @@ public class UserRepo {
 	}
 
 	/**
-	 * Deletes account by finding the username in the .txt file and updating
-	 * the entry line.
+	 * Deletes account by finding the username in the .txt files and updating
+	 * the entry lines in all respective files.
 	 * 
 	 * @param username
 	 * @param updatedPassword
 	 * @throws IOException
 	 */
 	public void deleteAccount(String username) throws IOException {
+		// Updating usernames.txt to replace with a placeholder
 		String usernameInfo = getFileContents("usernames.txt");
 		Scanner scan = new Scanner(usernameInfo);
 		String oldLine = "";
@@ -148,7 +149,6 @@ public class UserRepo {
 			if (accountInfoArray[0].equals(username)) {
 				oldLine = usernameLine;
 				newLine = "xxx";
-				System.out.println("USERNAME LINE " + usernameLine);
 			}
 			usernameInfo = usernameInfo.replace(oldLine, newLine);
 			usernameInfo = usernameInfo.replace("xxx\n", "");
@@ -156,8 +156,7 @@ public class UserRepo {
 			updateUsers.write(usernameInfo);
 			updateUsers.close();
 		}
-		
-		
+		// Updating accounts.txt to replace with a placeholder
 		String accountsText = getFileContents("accounts.txt");
 		scan = new Scanner(accountsText);
 		oldLine = "";
@@ -170,8 +169,6 @@ public class UserRepo {
 				accountNumber = accountInfoArray[1];
 				oldLine = accountLine;
 				newLine = "xxx";
-				System.out.println("Account number: " + accountNumber);
-				System.out.println(accountLine);
 			}
 			accountsText = accountsText.replace(oldLine, newLine);
 			accountsText = accountsText.replace("xxx\n", "");
@@ -179,7 +176,7 @@ public class UserRepo {
 			updateAccounts.write(accountsText);
 			updateAccounts.close();
 		}
-		
+		// Updating balance.txt to replace with a placeholder
 		String balanceText = getFileContents("balance.txt");
 		scan = new Scanner(balanceText);
 		oldLine = "";
@@ -190,7 +187,6 @@ public class UserRepo {
 			if (accountInfoArray[0].equals(accountNumber)) {
 				oldLine = balanceLine;
 				newLine = "xxx";
-				System.out.println("Balance line: " + balanceLine);
 			}
 			balanceText = balanceText.replace(oldLine, newLine);
 			balanceText = balanceText.replace("xxx\n", "");
@@ -198,7 +194,7 @@ public class UserRepo {
 			updateBalance.write(balanceText);
 			updateBalance.close();
 		}
-		
+		// Updating approvedUsers.txt to replace with a placeholder
 		String approvedText = getFileContents("approvedUsers.txt");
 		scan = new Scanner(approvedText);
 		oldLine = "";
@@ -209,7 +205,6 @@ public class UserRepo {
 			if (accountInfoArray[0].equals(accountNumber)) {
 				oldLine = approvedLine;
 				newLine = "xxx";
-				System.out.println("Balance line: " + approvedLine);
 			}
 			approvedText = approvedText.replace(oldLine, newLine);
 			approvedText = approvedText.replace("xxx\n", "");
@@ -217,20 +212,7 @@ public class UserRepo {
 			updateApproved.write(approvedText);
 			updateApproved.close();
 		}
-		
 	}
-
-		/**
-		 * Scanner readUsers;
-		 * 
-		 * try { String usersList = getFileContents("usernames.txt"); Scanner
-		 * readUsersList = new Scanner(usersList); while (readUsersList.hasNextLine()) {
-		 * String[] userInfo = readUsersList.nextLine().split(","); if
-		 * (userInfo[0].equals(username)) { userInfo[1] = updatedPassword; } else { //
-		 * keep going } } } catch (IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-
 
 	/**
 	 * This simply updates the balance in the balance.txt file
@@ -276,19 +258,30 @@ public class UserRepo {
 		return fileContents;
 	}
 
+	/**
+	 * Adds an approved user to an account.
+	 * @param Account
+	 * @param username
+	 * @return
+	 * @throws IOException
+	 */
 	public boolean addApprovedUser(Account Account, String username) throws IOException {
 		if(userExists(username)) {
 			FileWriter fw = new FileWriter(approvedUserTracker, true);
 			fw.append(Account.getAccountNum() + "," + username + "," + "\n");
-
 			fw.close();
 			return true;
 		} else {
 			return false;
 		}
-		
 	}
 
+	/**
+	 * Returns username of associate account number from accounts.txt.
+	 * @param accountNumber
+	 * @return username associated with account
+	 * @throws IOException
+	 */
 	public String usernameOnAccount(int accountNumber) throws IOException {
 		String fileInfo = getFileContents("accounts.txt");
 		Scanner scan = new Scanner(fileInfo);
@@ -302,6 +295,12 @@ public class UserRepo {
 		return "";
 	}
 
+	/**
+	 * Returns a list of all accounts a user has been approved for/added to.
+	 * @param username
+	 * @return list of all approved accounts for a user
+	 * @throws IOException
+	 */
 	public LinkedList<String> approvedAccounts(String username) throws IOException {
 		String fileInfo = getFileContents("approvedUsers.txt");
 		int i = 0;
@@ -314,7 +313,6 @@ public class UserRepo {
 				i = i + 1;
 				approvedAccounts.addLast(i + ": " + lineArray[0] + ", " + lineArray[1]);
 			}
-
 		}
 		if (i == 0) {
 			approvedAccounts.add("You have no other approved accounts.");
@@ -323,21 +321,18 @@ public class UserRepo {
 	}
 
 	/**
-	 * 
+	 * Declares whether a user has been approved to use a certain account.
 	 * @param accountNum
-	 * @return
+	 * @return true if user is approved for an account
 	 * @throws IOException
 	 */
 	public boolean isAnApprovedUser(int accountNum, String username) throws IOException {
 		String fileInfo = getFileContents("approvedUsers.txt");
 		Scanner scan = new Scanner(fileInfo);
-
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
 			String[] lineArray = line.split(",");
-
 			if (Integer.parseInt(lineArray[0]) == accountNum && lineArray[1].equals(username)) {
-
 				return true;
 			}
 		}
